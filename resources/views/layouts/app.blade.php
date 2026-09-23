@@ -18,7 +18,14 @@
                     <a href="{{ route('volunteer') }}" class="transition hover:text-coral">Je veux aider</a>
                     <a href="{{ route('association') }}" class="transition hover:text-coral">Associations</a>
                 </div>
-                <a href="{{ route('register.beneficiary') }}" class="rounded-full bg-coral px-4 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-coral-dark">Inscription</a>
+                @auth
+                    <a href="{{ route('profile') }}" class="rounded-full bg-coral px-4 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-coral-dark">Mon profil</a>
+                @else
+                    <div class="flex items-center gap-2">
+                        <a href="{{ route('login') }}" class="rounded-full px-3 py-2 text-sm font-bold text-ink transition hover:text-coral">Se connecter</a>
+                        <a href="{{ route('register.beneficiary') }}" class="rounded-full bg-coral px-4 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-coral-dark">Inscription</a>
+                    </div>
+                @endauth
             </nav>
         </header>
     @endunless

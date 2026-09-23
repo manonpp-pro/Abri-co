@@ -99,4 +99,75 @@
     .form-field {
         @apply mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-ink outline-none transition focus:border-coral focus:ring-2 focus:ring-coral/20;
     }
+
+    .profile-page {
+        max-width: 31rem;
+    }
+
+    .profile-heading {
+        margin-inline: -1.5rem;
+        margin-top: -2rem;
+        padding: 2.2rem 1.5rem 1.4rem;
+        background: #a52d0b;
+    }
+
+    .profile-tab {
+        border-radius: 9999px;
+        background: white;
+        padding: 0.55rem 1rem;
+        text-align: center;
+        font-weight: 700;
+        color: #a52d0b;
+    }
+
+    .profile-logout {
+        border-radius: 9999px;
+        background: rgb(255 255 255 / 20%);
+        padding: 0.55rem 1rem;
+        font-weight: 700;
+        color: white;
+        white-space: nowrap;
+        transition: background 150ms ease;
+    }
+
+    .profile-logout:hover {
+        background: rgb(255 255 255 / 35%);
+    }
+
+    .profile-card {
+        border: 1px solid #f4cbbd;
+        border-radius: 2rem;
+        background: white;
+        padding: 1.7rem;
+    }
+
+    .profile-initials {
+        display: grid;
+        height: 4.6rem;
+        width: 4.6rem;
+        place-items: center;
+        border-radius: 1.35rem;
+        background: #a52d0b;
+        color: white;
+        font-size: 1.6rem;
+        font-weight: 800;
+    }
+
+    .profile-action {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.35rem;
+        border-radius: 1.4rem;
+        background: #a52d0b;
+        padding: 1rem 1.25rem;
+        color: white;
+        font-weight: 700;
+        transition: background 150ms ease, transform 150ms ease;
+    }
+
+    .profile-action:hover {
+        background: #862508;
+        transform: translateY(-2px);
+    }
 }

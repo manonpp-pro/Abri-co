@@ -5,7 +5,14 @@
 @section('content')
     <nav class="mx-auto flex max-w-3xl items-center justify-between border-b border-[#eaded6] py-5" aria-label="Navigation principale">
         <a href="{{ route('home') }}" class="brand-logo text-2xl tracking-tight text-ink">abri<span class="text-coral">'</span>co</a>
-        <a href="{{ route('register.beneficiary') }}" class="rounded-full bg-coral px-4 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-coral-dark">Inscription</a>
+        @auth
+            <a href="{{ route('profile') }}" class="rounded-full bg-coral px-4 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-coral-dark">Mon profil</a>
+        @else
+            <div class="flex items-center gap-2">
+                <a href="{{ route('login') }}" class="rounded-full px-3 py-2 text-sm font-bold text-ink transition hover:text-coral">Se connecter</a>
+                <a href="{{ route('register.beneficiary') }}" class="rounded-full bg-coral px-4 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-coral-dark">Inscription</a>
+            </div>
+        @endauth
     </nav>
 
     <section class="mx-auto max-w-3xl py-8 sm:py-14">
