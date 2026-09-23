@@ -4,8 +4,9 @@
 @source '../../storage/framework/views/*.php';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    --font-sans: 'Playpen Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-brand: 'Playpen Sans', ui-sans-serif, sans-serif;
     --color-ink: #173f45;
     --color-coral: #e76f51;
     --color-coral-dark: #c9563b;
@@ -16,10 +17,85 @@
     body {
         background: #f7f5ef;
         color: #173f45;
+        font-family: 'Playpen Sans', ui-sans-serif, system-ui, sans-serif;
+    }
+
+    .brand-logo {
+        font-family: 'Playpen Sans', ui-sans-serif, sans-serif !important;
+        font-weight: 700;
     }
 }
 
 @layer components {
+    .home-action {
+        @apply relative flex min-h-24 items-center gap-3 rounded-2xl px-4 py-4 text-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg sm:min-h-40 sm:flex-col sm:items-start sm:justify-end sm:gap-1 sm:rounded-3xl sm:p-6;
+    }
+
+    .home-action-help {
+        background: #f65335;
+    }
+
+    .home-action-volunteer {
+        background: #e96d43;
+    }
+
+    .home-action-association {
+        background: #a52d0b;
+    }
+
+    .home-action-icon {
+        font-size: 1.25rem;
+        line-height: 1;
+    }
+
+    .home-action-copy {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        gap: 0.2rem;
+    }
+
+    .home-action-copy strong {
+        font-size: 1rem;
+    }
+
+    .home-action-copy small {
+        font-size: 0.7rem;
+        opacity: 0.85;
+    }
+
+    .home-action-arrow {
+        display: flex;
+        height: 2rem;
+        width: 2rem;
+        align-items: center;
+        justify-content: center;
+        border-radius: 9999px;
+        background: rgb(255 255 255 / 20%);
+        font-size: 1.25rem;
+        transition: transform 150ms ease;
+    }
+
+    .home-action:hover .home-action-arrow {
+        transform: translateX(0.2rem);
+    }
+
+    .home-stat {
+        @apply flex min-h-20 flex-col justify-center rounded-2xl bg-[#fce4d3] px-4 py-3 sm:min-h-24;
+    }
+
+    .home-stat strong {
+        color: #ef6746;
+        font-size: 1.45rem;
+        line-height: 1;
+    }
+
+    .home-stat span {
+        margin-top: 0.35rem;
+        color: #b46e5b;
+        font-size: 0.65rem;
+    }
+
     .form-field {
         @apply mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-ink outline-none transition focus:border-coral focus:ring-2 focus:ring-coral/20;
     }

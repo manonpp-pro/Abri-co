@@ -9,17 +9,19 @@
     @endif
 </head>
 <body class="min-h-screen">
-    <header class="border-b border-slate-200/80 bg-[#f7f5ef]/90 backdrop-blur">
-        <nav class="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-10" aria-label="Navigation principale">
-            <a href="{{ route('home') }}" class="text-2xl font-semibold tracking-tight text-ink">abri<span class="text-coral">.</span>co</a>
-            <div class="hidden items-center gap-7 text-sm font-medium text-slate-600 md:flex">
-                <a href="{{ route('help') }}" class="transition hover:text-coral">Besoin d'aide</a>
-                <a href="{{ route('volunteer') }}" class="transition hover:text-coral">Je veux aider</a>
-                <a href="{{ route('association') }}" class="transition hover:text-coral">Associations</a>
-            </div>
-            <a href="{{ route('register.beneficiary') }}" class="rounded-full bg-ink px-4 py-2 text-sm font-semibold text-white transition hover:bg-coral">S'inscrire</a>
-        </nav>
-    </header>
+    @unless (request()->routeIs('home'))
+        <header class="border-b border-slate-200/80 bg-[#f7f5ef]/90 backdrop-blur">
+            <nav class="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-10" aria-label="Navigation principale">
+                <a href="{{ route('home') }}" class="brand-logo text-2xl tracking-tight text-ink">abri<span class="text-coral">.</span>co</a>
+                <div class="hidden items-center gap-7 text-sm font-medium text-slate-600 md:flex">
+                    <a href="{{ route('help') }}" class="transition hover:text-coral">Besoin d'aide</a>
+                    <a href="{{ route('volunteer') }}" class="transition hover:text-coral">Je veux aider</a>
+                    <a href="{{ route('association') }}" class="transition hover:text-coral">Associations</a>
+                </div>
+                <a href="{{ route('register.beneficiary') }}" class="rounded-full bg-coral px-4 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-coral-dark">Inscription</a>
+            </nav>
+        </header>
+    @endunless
 
     <main class="mx-auto max-w-7xl px-6 lg:px-10">
         @yield('content')
