@@ -591,6 +591,20 @@
         padding: 0 0.6rem;
     }
 
+    .help-feed-heading {
+        margin: 1rem 0.6rem 0.6rem;
+    }
+
+    .help-feed-heading h2 {
+        color: #421b10;
+        font-size: 0.78rem;
+        font-weight: 800;
+    }
+
+    .association-feed-card {
+        border-color: #f0b59f;
+    }
+
     .help-no-results {
         margin: 1rem 0.6rem;
         color: #b46e5b;
@@ -1030,8 +1044,351 @@
         }
     }
 
+    .association-dashboard {
+        color: #421b10;
+    }
+
+    .association-dashboard-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 0.75rem;
+        border-radius: 1.25rem 1.25rem 0 0;
+        background: #a52d0b;
+        padding: 1rem;
+        color: white;
+    }
+
+    .association-dashboard-header p {
+        font-size: 0.62rem;
+        font-weight: 700;
+    }
+
+    .association-dashboard-header h1 {
+        margin-top: 0.15rem;
+        font-size: 1.25rem;
+        font-weight: 800;
+    }
+
+    .association-dashboard-header button {
+        border: 0;
+        border-radius: 9999px;
+        background: rgb(255 255 255 / 20%);
+        padding: 0.45rem 0.7rem;
+        color: white;
+        font-size: 0.58rem;
+        font-weight: 800;
+        white-space: nowrap;
+    }
+
+    .association-tabs {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.3rem;
+        background: #a52d0b;
+        padding: 0 0.6rem 0.7rem;
+    }
+
+    .association-tabs a {
+        border-radius: 9999px;
+        background: rgb(255 255 255 / 20%);
+        padding: 0.45rem 0.2rem;
+        color: white;
+        font-size: 0.58rem;
+        font-weight: 800;
+        text-align: center;
+    }
+
+    .association-tabs a.is-active {
+        background: white;
+        color: #a52d0b;
+    }
+
+    .association-status {
+        margin: 0.7rem 0.6rem;
+        border-radius: 0.8rem;
+        background: #dcfce7;
+        padding: 0.65rem 0.8rem;
+        color: #166534;
+        font-size: 0.7rem;
+        font-weight: 700;
+    }
+
+    .association-panel {
+        margin: 0.8rem 0.6rem 0;
+        border: 1px solid #f4cbbd;
+        border-radius: 1rem;
+        background: white;
+        padding: 0.8rem;
+    }
+
+    .association-panel h2,
+    .association-section-heading h2 {
+        color: #421b10;
+        font-size: 0.78rem;
+        font-weight: 800;
+    }
+
+    .association-form {
+        display: grid;
+        gap: 0.55rem;
+        margin-top: 0.65rem;
+    }
+
+    .association-form label {
+        display: block;
+    }
+
+    .association-form label > span {
+        display: block;
+        margin: 0 0 0.2rem 0.2rem;
+        color: #b46e5b;
+        font-size: 0.6rem;
+        font-weight: 700;
+    }
+
+    .association-form input,
+    .association-form textarea {
+        width: 100%;
+        border: 1px solid #f4cbbd;
+        border-radius: 0.7rem;
+        background: #fffaf7;
+        padding: 0.6rem;
+        color: #421b10;
+        font-size: 0.68rem;
+    }
+
+    .association-form button,
+    .association-profile-card a {
+        border: 0;
+        border-radius: 0.7rem;
+        background: #a52d0b;
+        padding: 0.65rem;
+        color: white;
+        font-size: 0.68rem;
+        font-weight: 800;
+        text-align: center;
+    }
+
+    .association-form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+    }
+
+    .association-section-heading {
+        margin: 1rem 0.6rem 0.6rem;
+    }
+
+    .association-list {
+        display: grid;
+        gap: 0.5rem;
+        padding: 0 0.6rem;
+    }
+
+    .association-list-card,
+    .association-need-card {
+        border: 1px solid #f4cbbd;
+        border-radius: 1rem;
+        background: white;
+        padding: 0.75rem;
+    }
+
+    .association-list-card {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+    }
+
+    .association-list-card h3,
+    .association-need-card h3 {
+        color: #421b10;
+        font-size: 0.7rem;
+        font-weight: 800;
+    }
+
+    .association-list-card p,
+    .association-need-card p,
+    .association-profile-card p {
+        margin-top: 0.15rem;
+        color: #c76d59;
+        font-size: 0.6rem;
+    }
+
+    .association-list-card > span {
+        border-radius: 9999px;
+        background: #fff0e7;
+        padding: 0.3rem 0.45rem;
+        color: #e96d43;
+        font-size: 0.55rem;
+        font-weight: 800;
+    }
+
+    .association-need-card {
+        position: relative;
+    }
+
+    .association-need-card strong {
+        position: absolute;
+        top: 0.75rem;
+        right: 0.75rem;
+        color: #e96d43;
+        font-size: 0.65rem;
+    }
+
+    .association-progress {
+        height: 0.35rem;
+        margin-top: 0.55rem;
+        overflow: hidden;
+        border-radius: 9999px;
+        background: #f4cbbd;
+    }
+
+    .association-progress span {
+        display: block;
+        height: 100%;
+        border-radius: inherit;
+        background: #e96d43;
+    }
+
+    .association-empty {
+        margin: 0 0.6rem;
+        color: #c76d59;
+        font-size: 0.68rem;
+    }
+
+    .association-stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+        padding: 0.8rem 0.6rem 0;
+    }
+
+    .association-stats div {
+        border-radius: 1rem;
+        background: #fff0e7;
+        padding: 0.7rem;
+    }
+
+    .association-stats strong,
+    .association-stats span {
+        display: block;
+    }
+
+    .association-stats strong {
+        color: #e96d43;
+        font-size: 1.2rem;
+    }
+
+    .association-stats span {
+        margin-top: 0.1rem;
+        color: #c76d59;
+        font-size: 0.58rem;
+    }
+
+    .association-profile-card {
+        margin: 0.8rem 0.6rem;
+        border: 1px solid #f4cbbd;
+        border-radius: 1rem;
+        background: white;
+        padding: 1rem;
+    }
+
+    .association-profile-initials {
+        display: grid;
+        height: 3rem;
+        width: 3rem;
+        place-items: center;
+        border-radius: 0.8rem;
+        background: #a52d0b;
+        color: white;
+        font-weight: 800;
+    }
+
+    .association-profile-card h2 {
+        margin-top: 0.7rem;
+        color: #421b10;
+        font-size: 1rem;
+        font-weight: 800;
+    }
+
+    .association-profile-card a {
+        display: block;
+        margin-top: 0.8rem;
+    }
+
+    .association-personal-page {
+        display: grid;
+        min-height: 70vh;
+        place-items: center;
+        padding: 2rem 0.6rem;
+    }
+
+    .association-personal-card {
+        width: min(100%, 30rem);
+        border: 1px solid #f4cbbd;
+        border-radius: 2rem;
+        background: white;
+        padding: 2rem 1.25rem;
+        text-align: center;
+        box-shadow: 0 1rem 2rem rgb(165 45 11 / 8%);
+    }
+
+    .association-personal-icon {
+        display: grid;
+        height: 3.5rem;
+        width: 3.5rem;
+        margin: 0 auto;
+        place-items: center;
+        border-radius: 1.1rem;
+        background: #fff0e7;
+        color: #a52d0b;
+        font-size: 1.3rem;
+    }
+
+    .association-personal-eyebrow {
+        margin-top: 1rem;
+        color: #e96d43;
+        font-size: 0.68rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
+
+    .association-personal-card h1 {
+        margin-top: 0.5rem;
+        color: #421b10;
+        font-size: 1.35rem;
+        font-weight: 800;
+    }
+
+    .association-personal-card > p:not(.association-personal-eyebrow) {
+        margin-top: 0.7rem;
+        color: #b46e5b;
+        font-size: 0.75rem;
+        line-height: 1.6;
+    }
+
+    .association-personal-card a {
+        display: block;
+        margin-top: 1.25rem;
+        border-radius: 9999px;
+        background: #a52d0b;
+        padding: 0.8rem 1rem;
+        color: white;
+        font-size: 0.72rem;
+        font-weight: 800;
+        transition: background 150ms ease;
+    }
+
+    .association-personal-card a:hover {
+        background: #862508;
+    }
+
     .volunteer-section-heading {
         margin: 1rem 0.6rem 0.65rem;
+        scroll-margin-top: 1rem;
     }
 
     .volunteer-section-heading h2 {

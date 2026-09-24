@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\AssociationEvent;
+use App\Models\AssociationNeed;
 use App\Models\Donation;
 use App\Models\Reservation;
 use App\Models\User;
@@ -178,12 +180,36 @@ $volunteerOpportunities = [
 
 Route::view('/', 'home')->name('home');
 Route::get('/besoin-aide', function () use ($helpServices) {
-    return view('pages.help', ['services' => $helpServices]);
+    return view('pages.help', [
+        'services' => $helpServices,
+        'associationEvents' => AssociationEvent::with('user')->where('status', 'published')->where('starts_at', '>=', now())->orderBy('starts_at')->get(),
+    ]);
 })->name('help');
 Route::get('/aider', function () use ($volunteerOpportunities) {
-    return view('pages.volunteer', ['opportunities' => $volunteerOpportunities]);
+    return view('pages.volunteer', [
+        'opportunities' => $volunteerOpportunities,
+        'associationEvents' => AssociationEvent::with('user')->where('status', 'published')->where('starts_at', '>=', now())->orderBy('starts_at')->get(),
+    ]);
 })->name('volunteer');
-Route::view('/association', 'pages.association')->name('association');
+Route::get('/association', function (Request $request) {
+    if (! $request->user()) {
+        return view('pages.association');
+    }
+
+    if ($request->user()->account_type !== 'professional') {
+        return view('pages.association', ['personal' => true]);
+    }
+
+    $user = $request->user();
+
+    return view('pages.association', [
+        'dashboard' => true,
+        'association' => $user,
+        'events' => AssociationEvent::where('user_id', $user->id)->orderBy('starts_at')->get(),
+        'needs' => AssociationNeed::where('user_id', $user->id)->orderBy('created_at')->get(),
+        'tab' => $request->query('tab', 'events'),
+    ]);
+})->name('association');
 Route::view('/inscription/beneficiaire', 'pages.register-beneficiary')->name('register.beneficiary');
 Route::post('/inscription/beneficiaire', function (Request $request) {
     $validated = $request->validate([
@@ -227,6 +253,34 @@ Route::post('/inscription/professionnel', function (Request $request) {
 
     return redirect()->route('profile');
 })->name('register.professional.store');
+Route::post('/association/evenement', function (Request $request) {
+    abort_unless($request->user()?->account_type === 'professional', 403);
+
+    $validated = $request->validate([
+        'title' => ['required', 'string', 'max:255'],
+        'location' => ['required', 'string', 'max:255'],
+        'starts_at' => ['required', 'date_format:Y-m-d\\TH:i', 'after_or_equal:now'],
+        'description' => ['nullable', 'string', 'max:2000'],
+    ]);
+
+    AssociationEvent::create([...$validated, 'user_id' => $request->user()->id]);
+
+    return to_route('association', ['tab' => 'events'])->with('status', 'Événement publié.');
+})->middleware('auth')->name('association.event.store');
+Route::post('/association/besoin', function (Request $request) {
+    abort_unless($request->user()?->account_type === 'professional', 403);
+
+    $validated = $request->validate([
+        'name' => ['required', 'string', 'max:255'],
+        'current_quantity' => ['required', 'integer', 'min:0'],
+        'target_quantity' => ['required', 'integer', 'min:1'],
+        'unit' => ['required', 'string', 'max:50'],
+    ]);
+
+    AssociationNeed::create([...$validated, 'user_id' => $request->user()->id]);
+
+    return to_route('association', ['tab' => 'needs'])->with('status', 'Besoin ajouté au suivi.');
+})->middleware('auth')->name('association.need.store');
 Route::post('/besoin-aide/reservation', function (Request $request) use ($helpServices) {
     $validated = $request->validate([
         'service' => ['required', Rule::in(array_column($helpServices, 'key'))],
@@ -276,6 +330,27 @@ Route::post('/aider/inscription', function (Request $request) use ($volunteerOpp
 
     return to_route('volunteer')->with('status', $message);
 })->middleware('auth')->name('volunteer.join');
+Route::post('/aider/inscription-evenement', function (Request $request) {
+    $validated = $request->validate([
+        'event' => ['required', 'integer', Rule::exists('association_events', 'id')->where('status', 'published')],
+    ]);
+
+    $event = AssociationEvent::where('status', 'published')->findOrFail($validated['event']);
+    $reservation = Reservation::firstOrCreate([
+        'user_id' => $request->user()->id,
+        'service_key' => 'association-event-'.$event->id,
+        'slot_date' => $event->starts_at->toDateString(),
+        'slot_time' => $event->starts_at->format('H:i'),
+    ], [
+        'service_name' => $event->title,
+    ]);
+
+    $message = $reservation->wasRecentlyCreated
+        ? 'Votre inscription à l’événement est confirmée.'
+        : 'Vous êtes déjà inscrit à cet événement.';
+
+    return to_route('volunteer')->with('status', $message);
+})->middleware('auth')->name('volunteer.event.join');
 Route::view('/don', 'pages.donation')->name('donation.create');
 Route::post('/don', function (Request $request) {
     $validated = $request->validate([

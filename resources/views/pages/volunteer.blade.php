@@ -54,6 +54,30 @@
             @endforeach
         </div>
 
+        @if ($associationEvents->isNotEmpty())
+            <div id="association-events" class="volunteer-section-heading"><h2>Événements des associations</h2></div>
+            <div class="volunteer-opportunities">
+                @foreach ($associationEvents as $event)
+                    <article class="volunteer-opportunity">
+                        <div>
+                            <h3>{{ $event->title }}</h3>
+                            <p>🤝 {{ $event->user->organization ?? 'Association partenaire' }} · {{ $event->location }}</p>
+                            <small>→ {{ $event->starts_at->format('d/m/Y') }} · {{ $event->starts_at->format('H\hi') }}</small>
+                        </div>
+                        @auth
+                            <form method="POST" action="{{ route('volunteer.event.join') }}">
+                                @csrf
+                                <input type="hidden" name="event" value="{{ $event->id }}">
+                                <button type="submit">S'inscrire</button>
+                            </form>
+                        @else
+                            <a href="{{ route('login') }}">S'inscrire</a>
+                        @endauth
+                    </article>
+                @endforeach
+            </div>
+        @endif
+
         <article id="partenaire" class="volunteer-partner-card">
             <h2>🏪 Vous êtes un commerce ?</h2>
             <p>Proposez des dons ou accueillez une collecte dans votre magasin.</p>

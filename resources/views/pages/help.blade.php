@@ -41,6 +41,23 @@
             </div>
         @endguest
 
+        @if ($associationEvents->isNotEmpty())
+            <div class="help-feed-heading"><h2>Actualités des associations</h2></div>
+            <div class="help-list">
+                @foreach ($associationEvents as $event)
+                    <article class="help-service-card association-feed-card">
+                        <div>
+                            <p class="help-category">{{ $event->user->organization ?? 'Association partenaire' }}</p>
+                            <h2>{{ $event->title }}</h2>
+                            <p class="help-description">{{ $event->description ?: 'Une action solidaire ouverte aux bénéficiaires et bénévoles.' }}</p>
+                            <p class="help-location">{{ $event->location }} · {{ $event->starts_at->format('d/m/Y à H\hi') }}</p>
+                        </div>
+                        <a href="{{ route('volunteer') }}#association-events" class="help-reserve-link">Voir l'événement →</a>
+                    </article>
+                @endforeach
+            </div>
+        @endif
+
         <div class="help-list">
             @foreach ($services as $service)
                 <article class="help-service-card" data-help-category="{{ $service['filter'] }}" data-help-text="{{ strtolower($service['title'].' '.$service['description'].' '.$service['location']) }}">
