@@ -18,7 +18,11 @@
                 <div class="hidden items-center gap-7 text-sm font-medium text-slate-600 md:flex">
                     <a href="{{ route('help') }}" class="transition hover:text-coral">Besoin d'aide</a>
                     <a href="{{ route('volunteer') }}" class="transition hover:text-coral">Je veux aider</a>
-                    <a href="{{ route('association') }}" class="transition hover:text-coral">Associations</a>
+                    @auth
+                        @if (auth()->user()->account_type === 'professional')
+                            <a href="{{ route('association') }}" class="transition hover:text-coral">Associations</a>
+                        @endif
+                    @endauth
                 </div>
                 @auth
                     <a href="{{ route('profile') }}" class="rounded-full bg-coral px-4 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-coral-dark">Mon profil</a>
