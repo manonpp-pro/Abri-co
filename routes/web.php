@@ -1,13 +1,55 @@
 <?php
 
+use App\Models\Reservation;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\Rule;
 
+$helpServices = [
+    [
+        'key' => 'collecte-solidaire',
+        'filter' => 'collectes',
+        'title' => 'Collecte solidaire',
+        'category' => 'Alimentation',
+        'description' => 'Paniers alimentaires proposés par des partenaires locaux.',
+        'location' => 'Bordeaux centre',
+        'slots' => ['10:00 - 11:00', '11:30 - 12:30', '14:00 - 15:00'],
+    ],
+    [
+        'key' => 'epicerie-solidaire',
+        'filter' => 'anti-gaspi',
+        'title' => 'Épicerie solidaire',
+        'category' => 'Alimentation',
+        'description' => 'Accédez à des produits essentiels à prix réduit.',
+        'location' => 'Saint-Denis',
+        'slots' => ['09:30 - 10:30', '13:30 - 14:30', '16:00 - 17:00'],
+    ],
+    [
+        'key' => 'aide-crous',
+        'filter' => 'aides',
+        'title' => 'Aides CAF & CROUS',
+        'category' => 'Droits et démarches',
+        'description' => 'Un accompagnement pour vos démarches et vos droits.',
+        'location' => 'En ligne',
+        'slots' => ['10:00 - 11:00', '15:00 - 16:00'],
+    ],
+    [
+        'key' => 'panier-petit-budget',
+        'filter' => 'petit-budget',
+        'title' => 'Panier petit budget',
+        'category' => 'Petit budget',
+        'description' => 'Des produits essentiels à prix réduit pour vos courses.',
+        'location' => 'Bordeaux nord',
+        'slots' => ['10:30 - 11:30', '14:30 - 15:30'],
+    ],
+];
+
 Route::view('/', 'home')->name('home');
-Route::view('/besoin-aide', 'pages.help')->name('help');
+Route::get('/besoin-aide', function () use ($helpServices) {
+    return view('pages.help', ['services' => $helpServices]);
+})->name('help');
 Route::view('/aider', 'pages.volunteer')->name('volunteer');
 Route::view('/association', 'pages.association')->name('association');
 Route::view('/inscription/beneficiaire', 'pages.register-beneficiary')->name('register.beneficiary');
@@ -53,6 +95,34 @@ Route::post('/inscription/professionnel', function (Request $request) {
 
     return redirect()->route('profile');
 })->name('register.professional.store');
+Route::post('/besoin-aide/reservation', function (Request $request) use ($helpServices) {
+    $validated = $request->validate([
+        'service' => ['required', Rule::in(array_column($helpServices, 'key'))],
+        'slot_date' => ['required', 'date_format:Y-m-d', 'after_or_equal:today'],
+        'slot_time' => ['required', 'string'],
+    ]);
+
+    $service = collect($helpServices)->firstWhere('key', $validated['service']);
+
+    if (! in_array($validated['slot_time'], $service['slots'], true)) {
+        return back()->withErrors(['slot_time' => 'Ce créneau n’est pas disponible pour ce service.'])->withInput();
+    }
+
+    $reservation = Reservation::firstOrCreate([
+        'user_id' => $request->user()->id,
+        'service_key' => $service['key'],
+        'slot_date' => $validated['slot_date'],
+        'slot_time' => $validated['slot_time'],
+    ], [
+        'service_name' => $service['title'],
+    ]);
+
+    $message = $reservation->wasRecentlyCreated
+        ? 'Votre créneau est réservé.'
+        : 'Vous avez déjà réservé ce créneau.';
+
+    return to_route('help')->with('status', $message);
+})->middleware('auth')->name('help.reserve');
 Route::view('/connexion', 'pages.login')->name('login');
 Route::post('/connexion', function (Request $request) {
     $credentials = $request->validate([
@@ -69,7 +139,14 @@ Route::post('/connexion', function (Request $request) {
     return to_route('profile');
 })->name('login.store');
 Route::get('/profil', function (Request $request) {
-    return view('pages.profile', ['user' => $request->user()]);
+    return view('pages.profile', [
+        'user' => $request->user(),
+        'reservations' => Reservation::query()
+            ->where('user_id', $request->user()->id)
+            ->where('slot_date', '>=', today())
+            ->orderBy('slot_date')
+            ->get(),
+    ]);
 })->middleware('auth')->name('profile');
 Route::get('/profil/modifier', function (Request $request) {
     $user = $request->user();

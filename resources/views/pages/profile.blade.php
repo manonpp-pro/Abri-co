@@ -38,6 +38,25 @@
         @endif
 
         @unless ($isProfessional)
+            <section class="profile-distributions" aria-labelledby="reservations-title">
+                <h2 id="reservations-title">Mes créneaux réservés</h2>
+                <div class="profile-distribution-grid">
+                    @forelse ($reservations as $reservation)
+                        <article class="profile-distribution-card">
+                            <span aria-hidden="true">✓</span>
+                            <div>
+                                <h3>{{ $reservation->service_name }}</h3>
+                                <p>{{ $reservation->slot_date->format('d/m/Y') }} · {{ $reservation->slot_time }}</p>
+                            </div>
+                        </article>
+                    @empty
+                        <p class="profile-empty-state">Aucun créneau réservé pour le moment.</p>
+                    @endforelse
+                </div>
+            </section>
+        @endunless
+
+        @unless ($isProfessional)
             <section class="profile-distributions" aria-labelledby="distributions-title">
                 <h2 id="distributions-title">{{ $isEnglish ? 'My past distributions' : 'Mes distributions passées' }}</h2>
                 <div class="profile-distribution-grid">

@@ -3,22 +3,78 @@
 @section('title', "J'ai besoin d'aide")
 
 @section('content')
-    <section class="mx-auto max-w-3xl py-16 lg:py-24">
-        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-coral">Vous n'êtes pas seul·e</p>
-        <h1 class="mt-4 text-4xl font-semibold tracking-tight text-ink sm:text-5xl">De quoi avez-vous besoin aujourd'hui ?</h1>
-        <p class="mt-5 max-w-2xl text-lg leading-8 text-slate-600">Quelques informations suffisent pour vous orienter vers le bon accompagnement. Vous pourrez préciser votre situation ensuite.</p>
-
-        <div class="mt-12 grid gap-4 sm:grid-cols-2">
-            <a href="{{ route('register.beneficiary') }}" class="rounded-3xl bg-white p-7 shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-1 hover:ring-coral">
-                <h2 class="text-xl font-semibold text-ink">Être écouté·e</h2>
-                <p class="mt-3 leading-7 text-slate-600">Parler à quelqu'un et ne plus rester seul face à une difficulté.</p>
-                <span class="mt-6 inline-block font-semibold text-coral">Créer mon compte →</span>
-            </a>
-            <a href="{{ route('register.beneficiary') }}" class="rounded-3xl bg-white p-7 shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-1 hover:ring-coral">
-                <h2 class="text-xl font-semibold text-ink">Trouver un accompagnement</h2>
-                <p class="mt-3 leading-7 text-slate-600">Accéder à des ressources et des personnes qui peuvent vous aider.</p>
-                <span class="mt-6 inline-block font-semibold text-coral">Créer mon compte →</span>
-            </a>
+    <section class="help-page mx-auto max-w-3xl py-6 sm:py-10">
+        <div class="help-hero">
+            <p>J'ai besoin d'aide</p>
+            <h1>Collectes & aides</h1>
+            <div class="help-tabs" aria-label="Catégories d'aide">
+                <button type="button" class="help-tab is-active" data-help-filter="all" aria-pressed="true">Tout</button>
+                <button type="button" class="help-tab" data-help-filter="collectes" aria-pressed="false">Collectes</button>
+                <button type="button" class="help-tab" data-help-filter="anti-gaspi" aria-pressed="false">Anti-gaspi</button>
+                <button type="button" class="help-tab" data-help-filter="aides" aria-pressed="false">Aides</button>
+                <button type="button" class="help-tab" data-help-filter="petit-budget" aria-pressed="false">Petit budget</button>
+            </div>
         </div>
+
+        @if (session('status'))
+            <p class="help-status">{{ session('status') }}</p>
+        @endif
+
+        @if ($errors->any())
+            <div class="help-errors">
+                @foreach ($errors->all() as $error)
+                    <p>{{ $error }}</p>
+                @endforeach
+            </div>
+        @endif
+
+        <div class="help-search" role="search">
+            <label class="sr-only" for="help-search">Rechercher une ville ou un service</label>
+            <input id="help-search" type="search" placeholder="Rechercher une ville ou un service...">
+        </div>
+
+        @guest
+            <div class="help-access-note">
+                <strong>Documentation rapide</strong>
+                <p>Consultez les aides disponibles. Connectez-vous pour voir les créneaux et réserver.</p>
+                <a href="{{ route('login') }}">Se connecter pour réserver →</a>
+            </div>
+        @endguest
+
+        <div class="help-list">
+            @foreach ($services as $service)
+                <article class="help-service-card" data-help-category="{{ $service['filter'] }}" data-help-text="{{ strtolower($service['title'].' '.$service['description'].' '.$service['location']) }}">
+                    <div>
+                        <p class="help-category">{{ $service['category'] }}</p>
+                        <h2>{{ $service['title'] }}</h2>
+                        <p class="help-description">{{ $service['description'] }}</p>
+                        <p class="help-location">{{ $service['location'] }}</p>
+                    </div>
+
+                    @auth
+                        <form method="POST" action="{{ route('help.reserve') }}" class="help-booking-form">
+                            @csrf
+                            <input type="hidden" name="service" value="{{ $service['key'] }}">
+                            <label>
+                                <span>Date</span>
+                                <input type="date" name="slot_date" min="{{ now()->toDateString() }}" value="{{ old('slot_date', now()->toDateString()) }}" required>
+                            </label>
+                            <label>
+                                <span>Créneau</span>
+                                <select name="slot_time" required>
+                                    @foreach ($service['slots'] as $slot)
+                                        <option value="{{ $slot }}" @selected(old('slot_time') === $slot)>{{ $slot }}</option>
+                                    @endforeach
+                                </select>
+                            </label>
+                            <button type="submit">Réserver</button>
+                        </form>
+                    @else
+                        <a href="{{ route('login') }}" class="help-reserve-link">Voir les créneaux →</a>
+                    @endauth
+                </article>
+            @endforeach
+        </div>
+        <p class="help-no-results" data-help-no-results hidden>Aucun service ne correspond à votre recherche.</p>
     </section>
 @endsection
