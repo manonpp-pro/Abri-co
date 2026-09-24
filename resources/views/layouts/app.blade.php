@@ -9,7 +9,7 @@
     @endif
 </head>
 <body class="min-h-screen">
-    @unless (request()->routeIs('home'))
+    @unless (request()->routeIs('home') || trim($__env->yieldContent('minimal_layout')) === 'true')
         <header class="border-b border-slate-200/80 bg-[#f7f5ef]/90 backdrop-blur">
             <nav class="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-10" aria-label="Navigation principale">
                 <a href="{{ route('home') }}" class="brand-logo text-2xl tracking-tight text-ink">abri<span class="text-coral">.</span>co</a>
@@ -30,12 +30,14 @@
         </header>
     @endunless
 
-    <main class="mx-auto max-w-7xl px-6 lg:px-10">
+    <main class="{{ trim($__env->yieldContent('minimal_layout')) === 'true' ? '' : 'mx-auto max-w-7xl px-6 lg:px-10' }}">
         @yield('content')
     </main>
 
-    <footer class="mt-10 border-t border-slate-200 px-6 py-8 text-center text-sm text-slate-500 lg:px-10">
-        <p>Abri-co, créer du lien quand il compte vraiment.</p>
-    </footer>
+    @unless (trim($__env->yieldContent('minimal_layout')) === 'true')
+        <footer class="mt-10 border-t border-slate-200 px-6 py-8 text-center text-sm text-slate-500 lg:px-10">
+            <p>Abri-co, créer du lien quand il compte vraiment.</p>
+        </footer>
+    @endunless
 </body>
 </html>

@@ -1,20 +1,38 @@
 @extends('layouts.app')
 
 @section('title', 'Inscription professionnel')
+@section('minimal_layout', 'true')
 
 @section('content')
-    <section class="mx-auto max-w-xl py-16 lg:py-24">
-        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-coral">Rejoindre le réseau</p>
-        <h1 class="mt-4 text-4xl font-semibold tracking-tight text-ink">Inscription professionnel</h1>
-        <p class="mt-4 leading-7 text-slate-600">Professionnel indépendant ou membre d'une association, présentez votre activité et vos disponibilités.</p>
-        <form class="mt-10 space-y-5 rounded-[2rem] bg-white p-7 shadow-sm ring-1 ring-slate-200 sm:p-9" action="#" method="POST">
+    @php
+        $editing = $editing ?? false;
+        $profileUser = $user ?? null;
+    @endphp
+
+    <section class="registration-page professional-registration-page">
+        <header class="registration-heading">
+            <p>Espace Professionnel</p>
+            <h1>{{ $editing ? 'Modifier mon profil' : 'Inscription' }}</h1>
+        </header>
+        @unless ($editing)
+            <a href="{{ route('register.beneficiary') }}" class="registration-submit registration-login">Inscription bénéficiaire <span aria-hidden="true">←</span></a>
+        @endunless
+        <form class="registration-form" action="{{ $editing ? route('profile.update') : route('register.professional.store') }}" method="POST">
             @csrf
-            <label class="block"><span class="text-sm font-semibold text-ink">Nom complet</span><input type="text" name="name" class="form-field" required></label>
-            <label class="block"><span class="text-sm font-semibold text-ink">E-mail professionnel</span><input type="email" name="email" class="form-field" required></label>
-            <label class="block"><span class="text-sm font-semibold text-ink">Structure ou association</span><input type="text" name="organization" class="form-field"></label>
-            <label class="block"><span class="text-sm font-semibold text-ink">Domaine d'intervention</span><input type="text" name="speciality" class="form-field" placeholder="Ex. médiation, santé, logement" required></label>
-            <label class="block"><span class="text-sm font-semibold text-ink">Mot de passe</span><input type="password" name="password" minlength="8" class="form-field" required><span class="mt-1 block text-xs text-slate-500">8 caractères minimum</span></label>
-            <button type="submit" class="w-full rounded-full bg-ink px-6 py-3 font-semibold text-white transition hover:bg-coral">Rejoindre Abri-co</button>
+            <div class="registration-fields professional-fields">
+                <label><span>Nom de l'association / entreprise</span><input type="text" name="organization" value="{{ old('organization', data_get($profileUser, 'organization')) }}" required></label>
+                <label><span>SIRET / numéro RNA</span><input type="text" name="registration_number" value="{{ old('registration_number', data_get($profileUser, 'registration_number')) }}" required></label>
+                <label><span>Site internet</span><input type="url" name="website" value="{{ old('website', data_get($profileUser, 'website')) }}"></label>
+                <label><span>Adresse</span><input type="text" name="address" value="{{ old('address', data_get($profileUser, 'address')) }}" required></label>
+                <label><span>Ville</span><input type="text" name="city" value="{{ old('city', data_get($profileUser, 'city')) }}" required></label>
+                <label><span>Code postal</span><input type="text" name="postal_code" value="{{ old('postal_code', data_get($profileUser, 'postal_code')) }}" inputmode="numeric" required></label>
+                <label><span>Nom et prénom du responsable</span><input type="text" name="manager_name" value="{{ old('manager_name', data_get($profileUser, 'manager_name')) }}" required></label>
+                <label><span>Téléphone</span><input type="tel" name="phone" value="{{ old('phone', data_get($profileUser, 'phone')) }}" required></label>
+                <label><span>E-mail</span><input type="email" name="email" value="{{ old('email', data_get($profileUser, 'email')) }}" required></label>
+                <label><span>Mot de passe{{ $editing ? ' (laisser vide pour conserver l’actuel)' : '' }}</span><input type="password" name="password" minlength="8" @required(! $editing)></label>
+            </div>
+            <button type="submit" class="registration-submit">{{ $editing ? 'Enregistrer les modifications' : 'Enregistrer' }} <span aria-hidden="true">→</span></button>
+            
         </form>
     </section>
 @endsection

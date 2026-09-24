@@ -1,32 +1,66 @@
 @extends('layouts.app')
 
 @section('title', 'Inscription bénéficiaire')
+@section('minimal_layout', 'true')
 
 @section('content')
-    <section class="mx-auto max-w-xl py-16 lg:py-24">
-        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-coral">Créer un compte</p>
-        <h1 class="mt-4 text-4xl font-semibold tracking-tight text-ink">Inscription bénéficiaire</h1>
-        <p class="mt-4 leading-7 text-slate-600">Votre compte vous permettra de trouver un accompagnement adapté à vos besoins.</p>
+    @php
+        $editing = $editing ?? false;
+        $profileUser = $user ?? null;
+    @endphp
+
+    <section class="registration-page">
+        <header class="registration-heading">
+            <p>Espace Personnel</p>
+            <h1>{{ $editing ? 'Modifier mon profil' : 'Inscription' }}</h1>
+        </header>
+
+
         @if (session('status'))
-            <p class="mt-6 rounded-xl bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-700">{{ session('status') }}</p>
+            <p class="registration-message registration-message-success">{{ session('status') }}</p>
         @endif
         @if ($errors->any())
-            <div class="mt-6 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
+            <div class="registration-message registration-message-error">
                 <p class="font-semibold">Le formulaire contient une erreur.</p>
-                <ul class="mt-1 list-disc pl-5">
+                <ul>
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
                 </ul>
             </div>
         @endif
-        <form class="mt-10 space-y-5 rounded-[2rem] bg-white p-7 shadow-sm ring-1 ring-slate-200 sm:p-9" action="{{ route('register.beneficiary.store') }}" method="POST">
+        <form class="registration-form" action="{{ $editing ? route('profile.update') : route('register.beneficiary.store') }}" method="POST">
             @csrf
-            <label class="block"><span class="text-sm font-semibold text-ink">Nom complet</span><input type="text" name="name" value="{{ old('name') }}" class="form-field" required></label>
-            <label class="block"><span class="text-sm font-semibold text-ink">Adresse e-mail</span><input type="email" name="email" value="{{ old('email') }}" class="form-field" required></label>
-            <label class="block"><span class="text-sm font-semibold text-ink">Mot de passe</span><input type="password" name="password" minlength="8" class="form-field" required><span class="mt-1 block text-xs text-slate-500">8 caractères minimum</span></label>
-            <label class="block"><span class="text-sm font-semibold text-ink">Votre besoin principal</span><select name="need" class="form-field"><option value="Écoute et soutien" @selected(old('need') === 'Écoute et soutien')>Écoute et soutien</option><option value="Accompagnement social" @selected(old('need') === 'Accompagnement social')>Accompagnement social</option><option value="Accès aux droits" @selected(old('need') === 'Accès aux droits')>Accès aux droits</option><option value="Autre besoin" @selected(old('need') === 'Autre besoin')>Autre besoin</option></select></label>
-            <button type="submit" class="w-full rounded-full bg-coral px-6 py-3 font-semibold text-white transition hover:bg-coral-dark">Créer mon compte</button>
+            <div class="registration-section-title">{{ $editing ? 'Modifier mon dossier individuel' : 'Remplir mon dossier individuel' }}</div>
+            @unless ($editing)
+                <a href="{{ route('register.professional') }}" class="registration-switch">Inscription professionnel / association <span aria-hidden="true">→</span></a>
+            @endunless
+            <div class="registration-fields">
+                <label><span>Nom de famille</span><input type="text" name="name" value="{{ old('name', data_get($profileUser, 'name')) }}" required></label>
+                <label><span>Prénom</span><input type="text" name="first_name" value="{{ old('first_name', data_get($profileUser, 'first_name')) }}" required></label>
+                <label><span>Téléphone</span><input type="tel" name="phone" value="{{ old('phone', data_get($profileUser, 'phone')) }}" required></label>
+                <fieldset>
+                    <legend>Quel est ton genre ?</legend>
+                    <div class="registration-options">
+                        <label><input type="radio" name="gender" value="Femme" @checked(old('gender', data_get($profileUser, 'gender')) === 'Femme') required><span>Femme</span></label>
+                        <label><input type="radio" name="gender" value="Homme" @checked(old('gender', data_get($profileUser, 'gender')) === 'Homme')><span>Homme</span></label>
+                        <label><input type="radio" name="gender" value="Autre" @checked(old('gender', data_get($profileUser, 'gender')) === 'Autre')><span>Autre</span></label>
+                    </div>
+                </fieldset>
+                <label><span>Quelle est ta date de naissance ?</span><input type="date" name="birth_date" value="{{ old('birth_date', data_get($profileUser, 'birth_date')?->format('Y-m-d')) }}" required></label>
+                <label><span>Ta ville ?</span><input type="text" name="city" value="{{ old('city', data_get($profileUser, 'city')) }}" required></label>
+                <label><span>Code postal</span><input type="text" name="postal_code" value="{{ old('postal_code', data_get($profileUser, 'postal_code')) }}" inputmode="numeric" required></label>
+                <label><span>Ton école ou université ?</span><input type="text" name="school" value="{{ old('school', data_get($profileUser, 'school')) }}" required></label>
+                <fieldset class="registration-email-section">
+                    <legend>Email</legend>
+                    <label><span>Adresse e-mail</span><input type="email" name="email" value="{{ old('email', data_get($profileUser, 'email')) }}" required></label>
+                </fieldset>
+                <label><span>Mot de passe{{ $editing ? ' (laisser vide pour conserver l’actuel)' : '' }}</span><input type="password" name="password" minlength="8" @required(! $editing)></label>
+            </div>
+            <button type="submit" class="registration-submit">{{ $editing ? 'Enregistrer les modifications' : 'Enregistrer' }}<span aria-hidden="true">→</span></button>
+            @unless ($editing)
+                <a href="{{ route('login') }}" class="registration-submit registration-login">Connexion<span aria-hidden="true">→</span></a>
+            @endunless
         </form>
     </section>
 @endsection
