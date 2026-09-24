@@ -11,6 +11,20 @@
             ->implode('');
         $isEnglish = session('locale') === 'en';
         $isProfessional = $user->account_type === 'professional';
+        $reservationGroups = [
+            [
+                'title' => 'Mes engagements bénévoles',
+                'icon' => '🤝',
+                'id' => 'volunteer-reservations-title',
+                'reservations' => $reservations->filter(fn ($reservation): bool => str_starts_with($reservation->service_key, 'volunteer-')),
+            ],
+            [
+                'title' => 'Mes collectes et aides',
+                'icon' => '♥',
+                'id' => 'help-reservations-title',
+                'reservations' => $reservations->filter(fn ($reservation): bool => ! str_starts_with($reservation->service_key, 'volunteer-')),
+            ],
+        ];
     @endphp
 
     <section class="profile-page mx-auto max-w-2xl py-8 sm:py-12">
@@ -40,19 +54,24 @@
         @unless ($isProfessional)
             <section class="profile-distributions" aria-labelledby="reservations-title">
                 <h2 id="reservations-title">Mes créneaux réservés</h2>
-                <div class="profile-distribution-grid">
-                    @forelse ($reservations as $reservation)
-                        <article class="profile-distribution-card">
-                            <span aria-hidden="true">✓</span>
-                            <div>
-                                <h3>{{ $reservation->service_name }}</h3>
-                                <p>{{ $reservation->slot_date->format('d/m/Y') }} · {{ $reservation->slot_time }}</p>
-                            </div>
-                        </article>
-                    @empty
-                        <p class="profile-empty-state">Aucun créneau réservé pour le moment.</p>
-                    @endforelse
-                </div>
+                @foreach ($reservationGroups as $group)
+                    <section class="profile-reservation-group" aria-labelledby="{{ $group['id'] }}">
+                        <h3><span aria-hidden="true">{{ $group['icon'] }}</span> {{ $group['title'] }}</h3>
+                        <div class="profile-distribution-grid">
+                            @forelse ($group['reservations'] as $reservation)
+                                <article class="profile-distribution-card">
+                                    <span aria-hidden="true">✓</span>
+                                    <div>
+                                        <h4>{{ $reservation->service_name }}</h4>
+                                        <p>{{ $reservation->slot_date->format('d/m/Y') }} · {{ $reservation->slot_time }}</p>
+                                    </div>
+                                </article>
+                            @empty
+                                <p class="profile-empty-state">Aucun créneau dans cette catégorie.</p>
+                            @endforelse
+                        </div>
+                    </section>
+                @endforeach
             </section>
         @endunless
 

@@ -199,6 +199,16 @@
         font-weight: 800;
     }
 
+    .profile-reservation-group {
+        margin-top: 1.25rem;
+    }
+
+    .profile-reservation-group > h3 {
+        color: #a52d0b;
+        font-size: 0.78rem;
+        font-weight: 800;
+    }
+
     .profile-distribution-grid {
         display: grid;
         gap: 0.65rem;
@@ -227,6 +237,12 @@
     }
 
     .profile-distribution-card h3 {
+        color: #421b10;
+        font-size: 0.78rem;
+        font-weight: 800;
+    }
+
+    .profile-distribution-card h4 {
         color: #421b10;
         font-size: 0.78rem;
         font-weight: 800;
@@ -733,4 +749,360 @@
         .help-booking-form button {
             margin-top: 0;
         }
+    }
+
+    .volunteer-page {
+        color: #421b10;
+    }
+
+    .volunteer-hero {
+        position: relative;
+        border-radius: 1.25rem 1.25rem 0 0;
+        background: #e96d43;
+        padding: 1.2rem 1rem 1.25rem;
+        color: white;
+    }
+
+    .volunteer-hero p {
+        font-size: 0.72rem;
+        font-weight: 700;
+    }
+
+    .volunteer-hero h1 {
+        margin-top: 0.15rem;
+        font-size: 1.8rem;
+        line-height: 1;
+        font-weight: 800;
+    }
+
+    .volunteer-hero-icon {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        display: grid;
+        height: 2.1rem;
+        width: 2.1rem;
+        place-items: center;
+        border-radius: 0.8rem;
+        background: rgb(255 255 255 / 20%);
+        font-size: 0.9rem;
+    }
+
+    .volunteer-status {
+        margin: 0.7rem 0.6rem 0;
+        border-radius: 0.8rem;
+        background: #dcfce7;
+        padding: 0.65rem 0.8rem;
+        color: #166534;
+        font-size: 0.72rem;
+        font-weight: 700;
+    }
+
+    .volunteer-donations {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+        padding: 1rem 0.6rem 0;
+    }
+
+    .volunteer-donation-card {
+        border: 1px solid #bfe8d9;
+        border-radius: 1rem;
+        background: #fffdfb;
+        padding: 0.75rem;
+        text-align: center;
+    }
+
+    .volunteer-donation-card-food {
+        border-color: #c7d8f7;
+        background: #fff4ea;
+    }
+
+    .volunteer-donation-icon {
+        display: block;
+        font-size: 1.2rem;
+        line-height: 1;
+    }
+
+    .volunteer-donation-card h2 {
+        margin-top: 0.45rem;
+        font-size: 0.72rem;
+        font-weight: 800;
+    }
+
+    .volunteer-donation-card p {
+        min-height: 2rem;
+        margin-top: 0.25rem;
+        color: #b46e5b;
+        font-size: 0.62rem;
+    }
+
+    .volunteer-donation-card a,
+    .volunteer-partner-card a {
+        display: block;
+        margin-top: 0.6rem;
+        border-radius: 0.65rem;
+        background: #e96d43;
+        padding: 0.5rem;
+        color: white;
+        font-size: 0.68rem;
+        font-weight: 800;
+    }
+
+    .volunteer-donation-card-food a {
+        background: #a52d0b;
+    }
+
+    .donation-page {
+        color: #421b10;
+    }
+
+    .donation-hero {
+        position: relative;
+        border-radius: 1.25rem 1.25rem 0 0;
+        background: #e96d43;
+        padding: 1.2rem 1rem 1.25rem;
+        color: white;
+    }
+
+    .donation-hero p {
+        font-size: 0.72rem;
+        font-weight: 700;
+    }
+
+    .donation-hero h1 {
+        margin-top: 0.15rem;
+        font-size: 1.8rem;
+        line-height: 1;
+        font-weight: 800;
+    }
+
+    .donation-hero > span {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        display: grid;
+        height: 2.1rem;
+        width: 2.1rem;
+        place-items: center;
+        border-radius: 0.8rem;
+        background: rgb(255 255 255 / 20%);
+    }
+
+    .donation-form {
+        display: grid;
+        gap: 1rem;
+        border: 1px solid #f4cbbd;
+        border-top: 0;
+        border-radius: 0 0 1.25rem 1.25rem;
+        background: white;
+        padding: 1rem;
+    }
+
+    .donation-form fieldset {
+        border: 0;
+        padding: 0;
+    }
+
+    .donation-form legend,
+    .donation-form label > span {
+        display: block;
+        margin-bottom: 0.4rem;
+        color: #421b10;
+        font-size: 0.72rem;
+        font-weight: 800;
+    }
+
+    .donation-choice-grid,
+    .donation-fields-grid {
+        display: grid;
+        gap: 0.5rem;
+    }
+
+    .donation-choice-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .donation-choice {
+        position: relative;
+        margin: 0 !important;
+    }
+
+    .donation-choice input {
+        position: absolute;
+        opacity: 0;
+    }
+
+    .donation-choice span {
+        display: block;
+        min-height: 2.7rem;
+        border: 1px solid #f4cbbd;
+        border-radius: 0.75rem;
+        background: #fffaf7;
+        padding: 0.7rem 0.5rem;
+        text-align: center;
+        color: #a52d0b;
+        font-size: 0.68rem;
+        font-weight: 800;
+    }
+
+    .donation-choice input:checked + span {
+        border-color: #e96d43;
+        background: #e96d43;
+        color: white;
+    }
+
+    .donation-choice input:focus-visible + span {
+        outline: 2px solid #a52d0b;
+        outline-offset: 2px;
+    }
+
+    .donation-fields-grid label,
+    .donation-form > label {
+        display: block;
+    }
+
+    .donation-form input:not([type='radio']),
+    .donation-form textarea {
+        width: 100%;
+        border: 1px solid #f4cbbd;
+        border-radius: 0.75rem;
+        background: #fffaf7;
+        padding: 0.7rem;
+        color: #421b10;
+        font-size: 0.72rem;
+        outline: none;
+    }
+
+    .donation-form input:focus,
+    .donation-form textarea:focus {
+        border-color: #e96d43;
+        box-shadow: 0 0 0 2px rgb(231 111 81 / 18%);
+    }
+
+    .donation-submit {
+        border: 0;
+        border-radius: 0.8rem;
+        background: #e96d43;
+        padding: 0.75rem;
+        color: white;
+        font-size: 0.75rem;
+        font-weight: 800;
+        transition: background 150ms ease;
+    }
+
+    .donation-submit:hover {
+        background: #c9563b;
+    }
+
+    .donation-note {
+        color: #c76d59;
+        font-size: 0.65rem;
+        text-align: center;
+    }
+
+    .donation-status,
+    .donation-errors {
+        margin-top: 0.7rem;
+        border-radius: 0.8rem;
+        padding: 0.7rem 0.8rem;
+        font-size: 0.72rem;
+    }
+
+    .donation-status {
+        background: #dcfce7;
+        color: #166534;
+        font-weight: 700;
+    }
+
+    .donation-errors {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+
+    .donation-errors p {
+        margin-top: 0.2rem;
+    }
+
+    @media (min-width: 640px) {
+        .donation-fields-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    .volunteer-section-heading {
+        margin: 1rem 0.6rem 0.65rem;
+    }
+
+    .volunteer-section-heading h2 {
+        font-size: 0.78rem;
+        font-weight: 800;
+    }
+
+    .volunteer-opportunities {
+        display: grid;
+        gap: 0.55rem;
+        padding: 0 0.6rem;
+    }
+
+    .volunteer-opportunity {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.6rem;
+        border: 1px solid #f4cbbd;
+        border-radius: 1rem;
+        background: white;
+        padding: 0.7rem 0.75rem;
+    }
+
+    .volunteer-opportunity h3 {
+        font-size: 0.7rem;
+        font-weight: 800;
+    }
+
+    .volunteer-opportunity p,
+    .volunteer-opportunity small {
+        display: block;
+        margin-top: 0.15rem;
+        color: #c76d59;
+        font-size: 0.58rem;
+    }
+
+    .volunteer-opportunity a,
+    .volunteer-opportunity button {
+        flex: 0 0 auto;
+        border: 0;
+        border-radius: 9999px;
+        background: #e96d43;
+        padding: 0.45rem 0.7rem;
+        color: white;
+        font-size: 0.6rem;
+        font-weight: 800;
+        white-space: nowrap;
+        transition: background 150ms ease;
+    }
+
+    .volunteer-opportunity a:hover,
+    .volunteer-opportunity button:hover {
+        background: #c9563b;
+    }
+
+    .volunteer-partner-card {
+        margin: 0.9rem 0.6rem 0;
+        border: 1px solid #f4cbbd;
+        border-radius: 1rem;
+        background: white;
+        padding: 0.8rem;
+    }
+
+    .volunteer-partner-card h2 {
+        font-size: 0.76rem;
+        font-weight: 800;
+    }
+
+    .volunteer-partner-card p {
+        margin-top: 0.25rem;
+        color: #c76d59;
+        font-size: 0.64rem;
     }

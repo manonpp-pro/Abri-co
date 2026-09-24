@@ -45,3 +45,34 @@ if (helpPage) {
 
 	searchInput.addEventListener('input', updateServices);
 }
+
+const donationForm = document.querySelector('[data-donation-form]');
+
+if (donationForm) {
+	const donorOrganization = donationForm.querySelector('[data-donor-organization]');
+	const donationFinancial = donationForm.querySelector('[data-donation-financial]');
+	const donationFood = donationForm.querySelector('[data-donation-food]');
+	const organizationInput = donationForm.querySelector('input[name="organization"]');
+	const amountInput = donationForm.querySelector('input[name="amount"]');
+	const descriptionInput = donationForm.querySelector('textarea[name="description"]');
+
+	const updateDonationFields = () => {
+		const donorType = donationForm.querySelector('input[name="donor_type"]:checked')?.value;
+		const donationType = donationForm.querySelector('input[name="donation_type"]:checked')?.value;
+		const isOrganization = donorType === 'organization';
+		const isFinancial = donationType === 'financial';
+
+		donorOrganization.hidden = !isOrganization;
+		donationFinancial.hidden = !isFinancial;
+		donationFood.hidden = isFinancial;
+		organizationInput.required = isOrganization;
+		amountInput.required = isFinancial;
+		descriptionInput.required = !isFinancial;
+	};
+
+	donationForm.querySelectorAll('input[type="radio"]').forEach((input) => {
+		input.addEventListener('change', updateDonationFields);
+	});
+
+	updateDonationFields();
+}

@@ -3,16 +3,61 @@
 @section('title', 'Je veux aider')
 
 @section('content')
-    <section class="mx-auto max-w-4xl py-16 lg:py-24">
-        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-coral">Votre temps a de la valeur</p>
-        <h1 class="mt-4 max-w-3xl text-4xl font-semibold tracking-tight text-ink sm:text-5xl">Aider peut commencer par une heure.</h1>
-        <p class="mt-5 max-w-2xl text-lg leading-8 text-slate-600">Choisissez la manière dont vous souhaitez contribuer. Abri-co vous mettra en relation avec des besoins concrets près de chez vous.</p>
-
-        <div class="mt-12 grid gap-5 md:grid-cols-3">
-            <div class="rounded-3xl bg-white p-6 ring-1 ring-slate-200"><h2 class="font-semibold text-ink">Donner du temps</h2><p class="mt-3 text-sm leading-6 text-slate-600">Accompagner, écouter ou rendre un service ponctuel.</p></div>
-            <div class="rounded-3xl bg-white p-6 ring-1 ring-slate-200"><h2 class="font-semibold text-ink">Partager une compétence</h2><p class="mt-3 text-sm leading-6 text-slate-600">Transmettre vos connaissances à celles et ceux qui en ont besoin.</p></div>
-            <div class="rounded-3xl bg-white p-6 ring-1 ring-slate-200"><h2 class="font-semibold text-ink">Créer du lien</h2><p class="mt-3 text-sm leading-6 text-slate-600">Être présent et participer à une communauté solidaire.</p></div>
+    <section class="volunteer-page mx-auto max-w-3xl py-6 sm:py-10">
+        <div class="volunteer-hero">
+            <p>Je veux aider</p>
+            <h1>Bénévolat & dons</h1>
+            <span class="volunteer-hero-icon" aria-hidden="true">🤝</span>
         </div>
-        <a href="{{ route('register.professional') }}" class="mt-10 inline-block rounded-full bg-coral px-6 py-3 font-semibold text-white transition hover:bg-coral-dark">Je m'inscris pour aider</a>
+
+        @if (session('status'))
+            <p class="volunteer-status">{{ session('status') }}</p>
+        @endif
+
+        <div class="volunteer-donations">
+            <article class="volunteer-donation-card">
+                <span class="volunteer-donation-icon" aria-hidden="true">○</span>
+                <h2>Don financier</h2>
+                <p>Particuliers, entreprises ou associations.</p>
+                <a href="{{ route('donation.create', ['type' => 'financial']) }}">Donner →</a>
+            </article>
+            <article class="volunteer-donation-card volunteer-donation-card-food">
+                <span class="volunteer-donation-icon" aria-hidden="true">○</span>
+                <h2>Don alimentaire</h2>
+                <p>Dépose des denrées, seul ou avec ton organisation.</p>
+                <a href="{{ route('donation.create', ['type' => 'food']) }}">Proposer un don →</a>
+            </article>
+        </div>
+
+        <div class="volunteer-section-heading">
+            <h2>Créneaux bénévoles</h2>
+        </div>
+
+        <div class="volunteer-opportunities">
+            @foreach ($opportunities as $opportunity)
+                <article class="volunteer-opportunity">
+                    <div>
+                        <h3>{{ $opportunity['title'] }}</h3>
+                        <p>🤝 {{ $opportunity['partner'] }}</p>
+                        <small>→ {{ $opportunity['display_date'] }} · {{ $opportunity['time'] }}</small>
+                    </div>
+                    @auth
+                        <form method="POST" action="{{ route('volunteer.join') }}">
+                            @csrf
+                            <input type="hidden" name="opportunity" value="{{ $opportunity['key'] }}">
+                            <button type="submit">S'inscrire</button>
+                        </form>
+                    @else
+                        <a href="{{ route('login') }}">S'inscrire</a>
+                    @endauth
+                </article>
+            @endforeach
+        </div>
+
+        <article id="partenaire" class="volunteer-partner-card">
+            <h2>🏪 Vous êtes un commerce ?</h2>
+            <p>Proposez des dons ou accueillez une collecte dans votre magasin.</p>
+            <a href="{{ route('register.professional') }}">Devenir partenaire →</a>
+        </article>
     </section>
 @endsection

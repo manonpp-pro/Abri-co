@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Donation;
 use App\Models\Reservation;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -136,11 +137,52 @@ $helpServices = [
     ],
 ];
 
+$volunteerOpportunities = [
+    [
+        'key' => 'distribution-paniers-saint-denis',
+        'title' => 'Distribution paniers - Saint-Denis',
+        'partner' => 'Fresque Solidaire',
+        'date' => '2026-09-28',
+        'display_date' => 'Sam 28 sep',
+        'time' => '10h - 5 places',
+        'slot' => '10:00 - 15:00',
+    ],
+    [
+        'key' => 'tri-alimentaire-ivry',
+        'title' => 'Tri alimentaire - Ivry-sur-Seine',
+        'partner' => 'Banque Alimentaire 94',
+        'date' => '2026-09-29',
+        'display_date' => 'Dim 29 sep',
+        'time' => '9h - 12 places',
+        'slot' => '09:00 - 12:00',
+    ],
+    [
+        'key' => 'collecte-monoprix-paris',
+        'title' => 'Collecte Monoprix - Paris 11e',
+        'partner' => 'Les Restos du Cœur',
+        'date' => '2026-10-03',
+        'display_date' => 'Jeu 3 oct',
+        'time' => '16h - 3 places',
+        'slot' => '16:00 - 19:00',
+    ],
+    [
+        'key' => 'maraude-etudiante',
+        'title' => 'Maraude étudiante nocturne',
+        'partner' => 'UniSolidaire',
+        'date' => '2026-10-04',
+        'display_date' => 'Ven 4 oct',
+        'time' => '22h - 8 places',
+        'slot' => '22:00 - 00:00',
+    ],
+];
+
 Route::view('/', 'home')->name('home');
 Route::get('/besoin-aide', function () use ($helpServices) {
     return view('pages.help', ['services' => $helpServices]);
 })->name('help');
-Route::view('/aider', 'pages.volunteer')->name('volunteer');
+Route::get('/aider', function () use ($volunteerOpportunities) {
+    return view('pages.volunteer', ['opportunities' => $volunteerOpportunities]);
+})->name('volunteer');
 Route::view('/association', 'pages.association')->name('association');
 Route::view('/inscription/beneficiaire', 'pages.register-beneficiary')->name('register.beneficiary');
 Route::post('/inscription/beneficiaire', function (Request $request) {
@@ -213,6 +255,43 @@ Route::post('/besoin-aide/reservation', function (Request $request) use ($helpSe
 
     return to_route('help')->with('status', $message);
 })->middleware('auth')->name('help.reserve');
+Route::post('/aider/inscription', function (Request $request) use ($volunteerOpportunities) {
+    $validated = $request->validate([
+        'opportunity' => ['required', Rule::in(array_column($volunteerOpportunities, 'key'))],
+    ]);
+
+    $opportunity = collect($volunteerOpportunities)->firstWhere('key', $validated['opportunity']);
+    $reservation = Reservation::firstOrCreate([
+        'user_id' => $request->user()->id,
+        'service_key' => 'volunteer-'.$opportunity['key'],
+        'slot_date' => $opportunity['date'],
+        'slot_time' => $opportunity['slot'],
+    ], [
+        'service_name' => $opportunity['title'],
+    ]);
+
+    $message = $reservation->wasRecentlyCreated
+        ? 'Votre inscription bénévole est confirmée.'
+        : 'Vous êtes déjà inscrit à ce créneau.';
+
+    return to_route('volunteer')->with('status', $message);
+})->middleware('auth')->name('volunteer.join');
+Route::view('/don', 'pages.donation')->name('donation.create');
+Route::post('/don', function (Request $request) {
+    $validated = $request->validate([
+        'donor_type' => ['required', Rule::in(['individual', 'organization'])],
+        'donation_type' => ['required', Rule::in(['financial', 'food'])],
+        'name' => ['required', 'string', 'max:255'],
+        'email' => ['required', 'email', 'max:255'],
+        'organization' => ['nullable', 'required_if:donor_type,organization', 'string', 'max:255'],
+        'amount' => ['nullable', 'required_if:donation_type,financial', 'numeric', 'min:1', 'max:999999.99'],
+        'description' => ['nullable', 'required_if:donation_type,food', 'string', 'max:2000'],
+    ]);
+
+    Donation::create($validated);
+
+    return to_route('donation.create')->with('status', 'Votre proposition de don a bien été envoyée.');
+})->name('donation.store');
 Route::view('/connexion', 'pages.login')->name('login');
 Route::post('/connexion', function (Request $request) {
     $credentials = $request->validate([
