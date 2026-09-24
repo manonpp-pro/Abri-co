@@ -4,6 +4,7 @@
 
 @section('content')
     @if ($dashboard ?? false)
+    <!-- Si l'association est connectée, on affiche son tableau de bord -->
         <section class="association-dashboard mx-auto max-w-3xl py-6 sm:py-10">
             <header class="association-dashboard-header">
                 <div>
@@ -17,10 +18,12 @@
             </header>
 
             @if (session('status'))
+            <!-- Message de confirmation après une action : événement créé -->
                 <p class="association-status">{{ session('status') }}</p>
             @endif
 
             <nav class="association-tabs" aria-label="Espace association">
+                <!-- Menu de naviguation -->
                 <a class="{{ $tab === 'events' ? 'is-active' : '' }}" href="{{ route('association', ['tab' => 'events']) }}">Événements</a>
                 <a class="{{ $tab === 'needs' ? 'is-active' : '' }}" href="{{ route('association', ['tab' => 'needs']) }}">Besoins live</a>
                 <a class="{{ $tab === 'registrations' ? 'is-active' : '' }}" href="{{ route('association', ['tab' => 'registrations']) }}">Inscriptions</a>
@@ -28,6 +31,7 @@
             </nav>
 
             @if ($tab === 'events')
+            <!-- ONGLET 1 : Créer et lister les événements -->
                 <div class="association-panel">
                     <h2>Créer un événement</h2>
                     <form method="POST" action="{{ route('association.event.store') }}" class="association-form">
@@ -53,6 +57,8 @@
                         <p class="association-empty">Aucun événement publié pour le moment.</p>
                     @endforelse
                 </div>
+
+                <!-- ONGLET 2 : Besoins en cours avec barre de progression -->
             @elseif ($tab === 'needs')
                 <div class="association-panel">
                     <h2>Ajouter un besoin</h2>
@@ -73,6 +79,8 @@
                         <p class="association-empty">Aucun besoin publié pour le moment.</p>
                     @endforelse
                 </div>
+
+                <!-- ONGLET 3 : Statistiques et liste des bénévoles inscrits -->
             @elseif ($tab === 'registrations')
                 <div class="association-stats"><div><strong>{{ $events->count() }}</strong><span>Événements publiés</span></div><div><strong>0</strong><span>Bénévoles inscrits</span></div><div><strong>0</strong><span>Créneaux ce mois</span></div><div><strong>0%</strong><span>Taux de présence</span></div></div>
                 <div class="association-section-heading"><h2>Dernières inscriptions</h2></div>
@@ -81,6 +89,8 @@
                 <div class="association-profile-card"><div class="association-profile-initials">{{ mb_strtoupper(mb_substr($association->organization, 0, 2)) }}</div><h2>{{ $association->organization }}</h2><p>Association ou entreprise · {{ $association->city }}</p><p>{{ $association->email }}</p><a href="{{ route('profile.edit') }}">Modifier le profil →</a></div>
             @endif
         </section>
+
+        <!-- ONGLET 4 : Aperçu de la fiche profil de l'association -->
     @elseif ($personal ?? false)
         <section class="association-personal-page">
             <div class="association-personal-card">
@@ -92,6 +102,8 @@
             </div>
         </section>
     @else
+
+    <!-- CAS 3 : Visiteur non connecté (Page de présentation / Landing Page) -->
         <section class="association-landing-page">
             <div class="association-landing-panel">
                 <p class="association-landing-eyebrow">Les forces réunies vont plus loin</p>

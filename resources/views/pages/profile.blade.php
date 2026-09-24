@@ -9,8 +9,12 @@
         $initials = collect(array_slice($nameParts, 0, 2))
             ->map(fn (string $part): string => mb_strtoupper(mb_substr($part, 0, 1)))
             ->implode('');
+
+            // On vérifie la langue choisie et si le compte est une asso ou un bénéficiaire
         $isEnglish = session('locale') === 'en';
         $isProfessional = $user->account_type === 'professional';
+
+        // On sépare les réservations : le bénévolat d'un côté, les aides de l'autre
         $reservationGroups = [
             [
                 'title' => 'Mes engagements bénévoles',
@@ -28,6 +32,7 @@
     @endphp
 
     <section class="profile-page mx-auto max-w-2xl py-8 sm:py-12">
+<!-- Titre adapté au compte avec le bouton de déconnexion -->
         <div class="profile-heading flex items-start justify-between gap-4">
             <div>
                 <p class="text-sm font-semibold text-white/75">{{ $isEnglish ? 'Personal space' : ($isProfessional ? 'Espace professionnel' : 'Espace personnel') }}</p>
@@ -40,7 +45,7 @@
         </div>
 
         <div class="profile-tab mt-7">{{ $isEnglish ? 'Profile' : 'Profil' }}</div>
-
+                            <!-- La carte de profil -->
         <div class="profile-card mt-8">
             <div class="profile-initials">{{ $initials }}</div>
             <h2 class="mt-5 text-2xl font-bold text-[#421b10]">{{ $displayName }}</h2>
@@ -52,6 +57,7 @@
         @endif
 
         <section class="profile-donations" aria-labelledby="profile-donations-title">
+            <!-- Section Dons -->
             <h2 id="profile-donations-title">{{ $isProfessional ? 'Dons reçus' : 'Mes dons' }}</h2>
             @if ($isProfessional)
                 <div class="profile-donation-total"><strong>{{ $receivedDonationCount }}</strong><span>don{{ $receivedDonationCount === 1 ? '' : 's' }} reçu{{ $receivedDonationCount === 1 ? '' : 's' }}</span></div>
@@ -73,6 +79,7 @@
         </section>
 
         @unless ($isProfessional)
+        <!-- Les créneaux réservés avec bouton d'annulation et caché pour le professionel -->
             <section class="profile-distributions" aria-labelledby="reservations-title">
                 <h2 id="reservations-title">Mes créneaux réservés</h2>
                 @foreach ($reservationGroups as $group)
@@ -101,6 +108,7 @@
         @endunless
 
         @unless ($isProfessional)
+        <!-- L'historique des anciennes distributions -->
             <section class="profile-distributions" aria-labelledby="distributions-title">
                 <h2 id="distributions-title">{{ $isEnglish ? 'My past distributions' : 'Mes distributions passées' }}</h2>
                 <div class="profile-distribution-grid">
@@ -118,6 +126,7 @@
         @endunless
 
         <div class="mt-12 grid gap-5">
+            <!-- Raccourcis pour modifier le profil ou changer la langue -->
             <a href="{{ route('profile.edit') }}" class="profile-action">{{ $isEnglish ? 'Edit profile' : 'Modifier le profil' }} <span aria-hidden="true">→</span></a>
             <a href="{{ route('language.toggle') }}" class="profile-action">{{ $isEnglish ? 'Language: French' : 'Choisir la langue : anglais' }} <span aria-hidden="true">→</span></a>
         </div>
