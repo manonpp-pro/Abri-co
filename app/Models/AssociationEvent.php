@@ -10,8 +10,11 @@ class AssociationEvent extends Model
     protected $fillable = [
         'user_id',
         'title',
+        'category',
         'location',
         'starts_at',
+        'capacity',
+        'event_type',
         'description',
         'status',
     ];

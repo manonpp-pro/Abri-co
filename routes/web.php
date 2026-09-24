@@ -178,19 +178,116 @@ $volunteerOpportunities = [
     ],
 ];
 
-Route::view('/', 'home')->name('home');
+Route::get('/', function () {
+    return view('home', [
+        'partnerAssociations' => User::query()
+            ->where('account_type', 'professional')
+            ->whereNotNull('organization')
+            ->orderBy('organization')
+            ->get(['id', 'organization', 'city']),
+    ]);
+})->name('home');
 Route::get('/besoin-aide', function () use ($helpServices) {
+    $services = collect($helpServices)->map(function (array $service): array {
+        $capacity = $service['capacity'] ?? 5;
+        $availability = collect($service['slots'])->mapWithKeys(function (string $slot) use ($service, $capacity): array {
+            $reserved = Reservation::query()
+                ->where('service_key', $service['key'])
+                ->whereDate('slot_date', today())
+                ->where('slot_time', $slot)
+                ->where('status', 'reserved')
+                ->count();
+
+            return [$slot => max(0, $capacity - $reserved)];
+        })->all();
+
+        return [...$service, 'capacity' => $capacity, 'availability' => $availability];
+    })->all();
+
     return view('pages.help', [
-        'services' => $helpServices,
+        'services' => $services,
         'associationEvents' => AssociationEvent::with('user')->where('status', 'published')->where('starts_at', '>=', now())->orderBy('starts_at')->get(),
     ]);
 })->name('help');
+Route::get('/besoin-aide/{service}', function (string $service) use ($helpServices) {
+    $helpService = collect($helpServices)->firstWhere('key', $service);
+    abort_unless($helpService !== null, 404);
+
+    return view('pages.post-detail', [
+        'title' => $helpService['title'],
+        'category' => $helpService['category'],
+        'description' => $helpService['description'],
+        'location' => $helpService['location'],
+        'date' => null,
+        'backRoute' => route('help'),
+        'backLabel' => "Retour aux besoins d'aide",
+    ]);
+})->name('help.detail');
+Route::get('/besoin-aide/{service}/disponibilite', function (Request $request, string $service) use ($helpServices) {
+    $helpService = collect($helpServices)->firstWhere('key', $service);
+    abort_unless($helpService !== null, 404);
+
+    $validated = $request->validate([
+        'date' => ['required', 'date_format:Y-m-d', 'after_or_equal:today'],
+    ]);
+    $capacity = $helpService['capacity'] ?? 5;
+
+    return response()->json(collect($helpService['slots'])->mapWithKeys(function (string $slot) use ($helpService, $validated, $capacity): array {
+        $reserved = Reservation::query()
+            ->where('service_key', $helpService['key'])
+            ->whereDate('slot_date', $validated['date'])
+            ->where('slot_time', $slot)
+            ->where('status', 'reserved')
+            ->count();
+
+        return [$slot => max(0, $capacity - $reserved)];
+    }));
+})->name('help.availability');
 Route::get('/aider', function () use ($volunteerOpportunities) {
+    $opportunities = collect($volunteerOpportunities)->map(function (array $opportunity): array {
+        $capacity = $opportunity['capacity'] ?? 5;
+        $reserved = Reservation::query()
+            ->where('service_key', 'volunteer-'.$opportunity['key'])
+            ->whereDate('slot_date', $opportunity['date'])
+            ->where('slot_time', $opportunity['slot'])
+            ->where('status', 'reserved')
+            ->count();
+
+        return [...$opportunity, 'capacity' => $capacity, 'remaining' => max(0, $capacity - $reserved)];
+    })->all();
+
     return view('pages.volunteer', [
-        'opportunities' => $volunteerOpportunities,
+        'opportunities' => $opportunities,
         'associationEvents' => AssociationEvent::with('user')->where('status', 'published')->where('starts_at', '>=', now())->orderBy('starts_at')->get(),
     ]);
 })->name('volunteer');
+Route::get('/aider/opportunite/{opportunity}', function (string $opportunity) use ($volunteerOpportunities) {
+    $volunteerOpportunity = collect($volunteerOpportunities)->firstWhere('key', $opportunity);
+    abort_unless($volunteerOpportunity !== null, 404);
+
+    return view('pages.post-detail', [
+        'title' => $volunteerOpportunity['title'],
+        'category' => 'Bénévolat',
+        'description' => 'Participez à cette action solidaire avec notre association partenaire.',
+        'location' => $volunteerOpportunity['partner'],
+        'date' => $volunteerOpportunity['display_date'].' · '.$volunteerOpportunity['slot'],
+        'backRoute' => route('volunteer'),
+        'backLabel' => 'Retour au bénévolat',
+    ]);
+})->name('volunteer.detail');
+Route::get('/aider/evenement/{event}', function (AssociationEvent $event) {
+    abort_unless($event->status === 'published', 404);
+
+    return view('pages.post-detail', [
+        'title' => $event->title,
+        'category' => $event->category,
+        'description' => $event->description ?: 'Un événement solidaire proposé par une association partenaire.',
+        'location' => $event->location,
+        'date' => $event->starts_at->format('d/m/Y à H\hi'),
+        'backRoute' => route('volunteer'),
+        'backLabel' => 'Retour au bénévolat',
+    ]);
+})->name('volunteer.event.detail');
 Route::get('/association', function (Request $request) {
     if (! $request->user()) {
         return view('pages.association');
@@ -205,7 +302,9 @@ Route::get('/association', function (Request $request) {
     return view('pages.association', [
         'dashboard' => true,
         'association' => $user,
-        'events' => AssociationEvent::where('user_id', $user->id)->orderBy('starts_at')->get(),
+        'events' => AssociationEvent::where('user_id', $user->id)->orderBy('starts_at')->get()->each(function (AssociationEvent $event): void {
+            $event->remaining_capacity = max(0, $event->capacity - Reservation::where('service_key', 'association-event-'.$event->id)->where('status', 'reserved')->count());
+        }),
         'needs' => AssociationNeed::where('user_id', $user->id)->orderBy('created_at')->get(),
         'tab' => $request->query('tab', 'events'),
     ]);
@@ -258,8 +357,11 @@ Route::post('/association/evenement', function (Request $request) {
 
     $validated = $request->validate([
         'title' => ['required', 'string', 'max:255'],
+        'category' => ['required', Rule::in(['collecte', 'aide', 'anti-gaspi', 'benevolat'])],
         'location' => ['required', 'string', 'max:255'],
         'starts_at' => ['required', 'date_format:Y-m-d\\TH:i', 'after_or_equal:now'],
+        'capacity' => ['required', 'integer', 'min:1', 'max:10000'],
+        'event_type' => ['required', Rule::in(['one_time', 'recurring'])],
         'description' => ['nullable', 'string', 'max:2000'],
     ]);
 
@@ -281,6 +383,20 @@ Route::post('/association/besoin', function (Request $request) {
 
     return to_route('association', ['tab' => 'needs'])->with('status', 'Besoin ajouté au suivi.');
 })->middleware('auth')->name('association.need.store');
+Route::delete('/association/evenement/{event}', function (Request $request, AssociationEvent $event) {
+    abort_unless($event->user_id === $request->user()->id, 403);
+
+    $event->delete();
+
+    return to_route('association', ['tab' => 'events'])->with('status', 'Événement supprimé.');
+})->middleware('auth')->name('association.event.destroy');
+Route::delete('/association/besoin/{need}', function (Request $request, AssociationNeed $need) {
+    abort_unless($need->user_id === $request->user()->id, 403);
+
+    $need->delete();
+
+    return to_route('association', ['tab' => 'needs'])->with('status', 'Besoin supprimé.');
+})->middleware('auth')->name('association.need.destroy');
 Route::post('/besoin-aide/reservation', function (Request $request) use ($helpServices) {
     $validated = $request->validate([
         'service' => ['required', Rule::in(array_column($helpServices, 'key'))],
@@ -292,6 +408,18 @@ Route::post('/besoin-aide/reservation', function (Request $request) use ($helpSe
 
     if (! in_array($validated['slot_time'], $service['slots'], true)) {
         return back()->withErrors(['slot_time' => 'Ce créneau n’est pas disponible pour ce service.'])->withInput();
+    }
+
+    $capacity = $service['capacity'] ?? 5;
+    $reservedCount = Reservation::query()
+        ->where('service_key', $service['key'])
+        ->whereDate('slot_date', $validated['slot_date'])
+        ->where('slot_time', $validated['slot_time'])
+        ->where('status', 'reserved')
+        ->count();
+
+    if ($reservedCount >= $capacity) {
+        return back()->withErrors(['slot_time' => 'Ce créneau est complet.'])->withInput();
     }
 
     $reservation = Reservation::firstOrCreate([
@@ -315,6 +443,18 @@ Route::post('/aider/inscription', function (Request $request) use ($volunteerOpp
     ]);
 
     $opportunity = collect($volunteerOpportunities)->firstWhere('key', $validated['opportunity']);
+    $capacity = $opportunity['capacity'] ?? 5;
+    $reservedCount = Reservation::query()
+        ->where('service_key', 'volunteer-'.$opportunity['key'])
+        ->whereDate('slot_date', $opportunity['date'])
+        ->where('slot_time', $opportunity['slot'])
+        ->where('status', 'reserved')
+        ->count();
+
+    if ($reservedCount >= $capacity) {
+        return back()->withErrors(['opportunity' => 'Ce créneau bénévole est complet.'])->withInput();
+    }
+
     $reservation = Reservation::firstOrCreate([
         'user_id' => $request->user()->id,
         'service_key' => 'volunteer-'.$opportunity['key'],
@@ -336,6 +476,15 @@ Route::post('/aider/inscription-evenement', function (Request $request) {
     ]);
 
     $event = AssociationEvent::where('status', 'published')->findOrFail($validated['event']);
+    $reservedCount = Reservation::query()
+        ->where('service_key', 'association-event-'.$event->id)
+        ->where('status', 'reserved')
+        ->count();
+
+    if ($reservedCount >= $event->capacity) {
+        return back()->withErrors(['event' => 'Cet événement est complet.'])->withInput();
+    }
+
     $reservation = Reservation::firstOrCreate([
         'user_id' => $request->user()->id,
         'service_key' => 'association-event-'.$event->id,
@@ -351,6 +500,13 @@ Route::post('/aider/inscription-evenement', function (Request $request) {
 
     return to_route('volunteer')->with('status', $message);
 })->middleware('auth')->name('volunteer.event.join');
+Route::post('/profil/reservation/{reservation}/annuler', function (Request $request, Reservation $reservation) {
+    abort_unless($reservation->user_id === $request->user()->id, 403);
+
+    $reservation->delete();
+
+    return to_route('profile')->with('status', 'Votre réservation a été annulée.');
+})->middleware('auth')->name('reservation.cancel');
 Route::view('/don', 'pages.donation')->name('donation.create');
 Route::post('/don', function (Request $request) {
     $validated = $request->validate([
@@ -363,7 +519,7 @@ Route::post('/don', function (Request $request) {
         'description' => ['nullable', 'required_if:donation_type,food', 'string', 'max:2000'],
     ]);
 
-    Donation::create($validated);
+    Donation::create([...$validated, 'user_id' => $request->user()?->id]);
 
     return to_route('donation.create')->with('status', 'Votre proposition de don a bien été envoyée.');
 })->name('donation.store');
@@ -383,13 +539,22 @@ Route::post('/connexion', function (Request $request) {
     return to_route('profile');
 })->name('login.store');
 Route::get('/profil', function (Request $request) {
+    $user = $request->user();
+
     return view('pages.profile', [
-        'user' => $request->user(),
+        'user' => $user,
         'reservations' => Reservation::query()
-            ->where('user_id', $request->user()->id)
+            ->where('user_id', $user->id)
             ->where('slot_date', '>=', today())
             ->orderBy('slot_date')
             ->get(),
+        'donations' => Donation::query()
+            ->where('user_id', $user->id)
+            ->latest()
+            ->get(),
+        'receivedDonationCount' => $user->account_type === 'professional'
+            ? Donation::query()->where('organization', $user->organization)->count()
+            : 0,
     ]);
 })->middleware('auth')->name('profile');
 Route::get('/profil/modifier', function (Request $request) {

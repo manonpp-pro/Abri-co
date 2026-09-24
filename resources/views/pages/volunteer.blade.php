@@ -37,15 +37,15 @@
             @foreach ($opportunities as $opportunity)
                 <article class="volunteer-opportunity">
                     <div>
-                        <h3>{{ $opportunity['title'] }}</h3>
+                        <h3><a href="{{ route('volunteer.detail', $opportunity['key']) }}">{{ $opportunity['title'] }}</a></h3>
                         <p>🤝 {{ $opportunity['partner'] }}</p>
-                        <small>→ {{ $opportunity['display_date'] }} · {{ $opportunity['time'] }}</small>
+                        <small>→ {{ $opportunity['display_date'] }} · {{ $opportunity['time'] }} · {{ $opportunity['remaining'] }} places restantes</small>
                     </div>
                     @auth
                         <form method="POST" action="{{ route('volunteer.join') }}">
                             @csrf
                             <input type="hidden" name="opportunity" value="{{ $opportunity['key'] }}">
-                            <button type="submit">S'inscrire</button>
+                            <button type="submit" @disabled($opportunity['remaining'] === 0)>S'inscrire</button>
                         </form>
                     @else
                         <a href="{{ route('login') }}">S'inscrire</a>
@@ -60,7 +60,7 @@
                 @foreach ($associationEvents as $event)
                     <article class="volunteer-opportunity">
                         <div>
-                            <h3>{{ $event->title }}</h3>
+                            <h3><a href="{{ route('volunteer.event.detail', $event) }}">{{ $event->title }}</a></h3>
                             <p>🤝 {{ $event->user->organization ?? 'Association partenaire' }} · {{ $event->location }}</p>
                             <small>→ {{ $event->starts_at->format('d/m/Y') }} · {{ $event->starts_at->format('H\hi') }}</small>
                         </div>

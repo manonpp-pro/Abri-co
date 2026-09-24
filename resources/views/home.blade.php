@@ -47,7 +47,24 @@
                 <div class="home-stat"><strong>0</strong><span>Étudiants aidés</span></div>
                 <div class="home-stat"><strong>0</strong><span>Collectes actives</span></div>
                 <div class="home-stat"><strong>0</strong><span>Bénévoles inscrits</span></div>
-                <div class="home-stat"><strong>0</strong><span>Assos partenaires</span></div>
+                <div class="home-stat"><strong>{{ $partnerAssociations->count() }}</strong><span>Assos partenaires</span></div>
             </div>
         </div>
+
+        <section class="home-partners" aria-labelledby="home-partners-title">
+            <h2 id="home-partners-title">Associations partenaires</h2>
+            <div class="home-partner-list">
+                @forelse ($partnerAssociations as $association)
+                    <article class="home-partner-card">
+                        <span aria-hidden="true">🏛️</span>
+                        <div>
+                            <h3>{{ $association->organization }}</h3>
+                            <p>{{ $association->city ?: 'Partenaire Abri-co' }}</p>
+                        </div>
+                    </article>
+                @empty
+                    <p class="home-partners-empty">Les associations partenaires apparaîtront ici.</p>
+                @endforelse
+            </div>
+        </section>
     </section>

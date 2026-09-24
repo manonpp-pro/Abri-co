@@ -51,6 +51,27 @@
             <p class="profile-status">{{ session('status') }}</p>
         @endif
 
+        <section class="profile-donations" aria-labelledby="profile-donations-title">
+            <h2 id="profile-donations-title">{{ $isProfessional ? 'Dons reçus' : 'Mes dons' }}</h2>
+            @if ($isProfessional)
+                <div class="profile-donation-total"><strong>{{ $receivedDonationCount }}</strong><span>don{{ $receivedDonationCount === 1 ? '' : 's' }} reçu{{ $receivedDonationCount === 1 ? '' : 's' }}</span></div>
+            @elseif ($donations->isNotEmpty())
+                <div class="profile-donation-list">
+                    @foreach ($donations as $donation)
+                        <article class="profile-donation-row">
+                            <span aria-hidden="true">♥</span>
+                            <div>
+                                <h3>{{ $donation->donation_type === 'financial' ? 'Don financier' : 'Don alimentaire' }}</h3>
+                                <p>{{ $donation->created_at?->format('d/m/Y') }} · {{ $donation->status === 'pending' ? 'En attente' : $donation->status }}</p>
+                            </div>
+                        </article>
+                    @endforeach
+                </div>
+            @else
+                <p class="profile-empty-state">Aucun don enregistré pour le moment.</p>
+            @endif
+        </section>
+
         @unless ($isProfessional)
             <section class="profile-distributions" aria-labelledby="reservations-title">
                 <h2 id="reservations-title">Mes créneaux réservés</h2>
@@ -65,6 +86,10 @@
                                         <h4>{{ $reservation->service_name }}</h4>
                                         <p>{{ $reservation->slot_date->format('d/m/Y') }} · {{ $reservation->slot_time }}</p>
                                     </div>
+                                    <form method="POST" action="{{ route('reservation.cancel', $reservation) }}">
+                                        @csrf
+                                        <button type="submit" class="profile-cancel-button">Annuler</button>
+                                    </form>
                                 </article>
                             @empty
                                 <p class="profile-empty-state">Aucun créneau dans cette catégorie.</p>

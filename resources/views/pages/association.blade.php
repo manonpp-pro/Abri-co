@@ -33,8 +33,11 @@
                     <form method="POST" action="{{ route('association.event.store') }}" class="association-form">
                         @csrf
                         <label><span>Nom de l'événement</span><input type="text" name="title" placeholder="Ex. Nom de l'événement" required></label>
+                        <label><span>Catégorie</span><select name="category" required><option value="collecte">Collecte</option><option value="aide">Aide</option><option value="anti-gaspi">Anti-gaspi</option><option value="benevolat">Bénévolat</option></select></label>
                         <label><span>Lieu</span><input type="text" name="location" placeholder="Ex. Lieu..." required></label>
                         <label><span>Date & horaires</span><input type="datetime-local" name="starts_at" min="{{ now()->format('Y-m-d\TH:i') }}" required></label>
+                        <label><span>Nombre de places</span><input type="number" name="capacity" min="1" max="10000" value="5" required></label>
+                        <label><span>Type</span><select name="event_type" required><option value="one_time">Ponctuel / unique</option><option value="recurring">Récurrent</option></select></label>
                         <label><span>Description</span><textarea name="description" rows="3" placeholder="Ex. Description..."></textarea></label>
                         <button type="submit">Publier →</button>
                     </form>
@@ -43,8 +46,8 @@
                 <div class="association-list">
                     @forelse ($events as $event)
                         <article class="association-list-card">
-                            <div><h3>{{ $event->title }}</h3><p>{{ $event->location }} · {{ $event->starts_at->format('d/m/Y à H\hi') }}</p></div>
-                            <span>Publié</span>
+                            <div><h3>{{ $event->title }}</h3><p>{{ $event->location }} · {{ $event->starts_at->format('d/m/Y à H\hi') }}</p><p>{{ $event->capacity }} places · {{ $event->remaining_capacity }} restantes</p></div>
+                            <div class="association-card-actions"><span>Publié</span><form method="POST" action="{{ route('association.event.destroy', $event) }}">@csrf @method('DELETE')<button type="submit">Supprimer</button></form></div>
                         </article>
                     @empty
                         <p class="association-empty">Aucun événement publié pour le moment.</p>
@@ -65,7 +68,7 @@
                 <div class="association-list">
                     @forelse ($needs as $need)
                         @php $progress = min(100, (int) round(($need->current_quantity / $need->target_quantity) * 100)); @endphp
-                        <article class="association-need-card"><div><h3>{{ $need->name }}</h3><p>{{ $need->current_quantity }} / {{ $need->target_quantity }} {{ $need->unit }}</p></div><strong>{{ $progress }}%</strong><div class="association-progress"><span style="width: {{ $progress }}%"></span></div></article>
+                        <article class="association-need-card"><div><h3>{{ $need->name }}</h3><p>{{ $need->current_quantity }} / {{ $need->target_quantity }} {{ $need->unit }}</p></div><strong>{{ $progress }}%</strong><form method="POST" action="{{ route('association.need.destroy', $need) }}">@csrf @method('DELETE')<button type="submit">Supprimer</button></form><div class="association-progress"><span style="width: {{ $progress }}%"></span></div></article>
                     @empty
                         <p class="association-empty">Aucun besoin publié pour le moment.</p>
                     @endforelse

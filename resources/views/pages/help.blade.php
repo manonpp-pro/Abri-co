@@ -14,6 +14,7 @@
                 <button type="button" class="help-tab" data-help-filter="aides" aria-pressed="false">Aides</button>
                 <button type="button" class="help-tab" data-help-filter="petit-budget" aria-pressed="false">Petit budget</button>
             </div>
+            <label class="help-sort"><span>Trier les publications</span><select data-help-sort><option value="date">Plus proche</option><option value="priority">Plus urgent</option><option value="category">Par catégorie</option></select></label>
         </div>
 
         @if (session('status'))
@@ -45,14 +46,14 @@
             <div class="help-feed-heading"><h2>Actualités des associations</h2></div>
             <div class="help-list">
                 @foreach ($associationEvents as $event)
-                    <article class="help-service-card association-feed-card">
+                    <article class="help-service-card association-feed-card" data-help-category="{{ $event->category }}" data-help-text="{{ strtolower($event->title.' '.$event->description.' '.$event->location) }}" data-help-date="{{ $event->starts_at->timestamp }}" data-help-priority="1">
                         <div>
                             <p class="help-category">{{ $event->user->organization ?? 'Association partenaire' }}</p>
-                            <h2>{{ $event->title }}</h2>
+                            <h2><a href="{{ route('volunteer.event.detail', $event) }}">{{ $event->title }}</a></h2>
                             <p class="help-description">{{ $event->description ?: 'Une action solidaire ouverte aux bénéficiaires et bénévoles.' }}</p>
                             <p class="help-location">{{ $event->location }} · {{ $event->starts_at->format('d/m/Y à H\hi') }}</p>
                         </div>
-                        <a href="{{ route('volunteer') }}#association-events" class="help-reserve-link">Voir l'événement →</a>
+                            <a href="{{ route('volunteer.event.detail', $event) }}" class="help-reserve-link">Voir l'événement →</a>
                     </article>
                 @endforeach
             </div>
@@ -60,10 +61,10 @@
 
         <div class="help-list">
             @foreach ($services as $service)
-                <article class="help-service-card" data-help-category="{{ $service['filter'] }}" data-help-text="{{ strtolower($service['title'].' '.$service['description'].' '.$service['location']) }}">
+                <article class="help-service-card" data-help-category="{{ $service['filter'] }}" data-help-text="{{ strtolower($service['title'].' '.$service['description'].' '.$service['location']) }}" data-help-date="{{ $loop->index }}" data-help-priority="{{ $loop->index + 1 }}">
                     <div>
                         <p class="help-category">{{ $service['category'] }}</p>
-                        <h2>{{ $service['title'] }}</h2>
+                            <h2><a href="{{ route('help.detail', $service['key']) }}">{{ $service['title'] }}</a></h2>
                         <p class="help-description">{{ $service['description'] }}</p>
                         <p class="help-location">{{ $service['location'] }}</p>
 
@@ -90,7 +91,7 @@
                     </div>
 
                     @auth
-                        <form method="POST" action="{{ route('help.reserve') }}" class="help-booking-form">
+                        <form method="POST" action="{{ route('help.reserve') }}" class="help-booking-form" data-help-service="{{ $service['key'] }}">
                             @csrf
                             <input type="hidden" name="service" value="{{ $service['key'] }}">
                             <label>
@@ -101,11 +102,12 @@
                                 <span>Créneau</span>
                                 <select name="slot_time" required>
                                     @foreach ($service['slots'] as $slot)
-                                        <option value="{{ $slot }}" @selected(old('slot_time') === $slot)>{{ $slot }}</option>
+                                        <option value="{{ $slot }}" data-remaining="{{ $service['availability'][$slot] }}" @selected(old('slot_time') === $slot)>{{ $slot }} · {{ $service['availability'][$slot] }} places restantes</option>
                                     @endforeach
                                 </select>
+                                <small class="help-availability" data-help-availability></small>
                             </label>
-                            <button type="submit">Réserver</button>
+                            <button type="submit" @disabled($service['availability'][$service['slots'][0]] === 0)>Réserver</button>
                         </form>
                     @else
                         <a href="{{ route('login') }}" class="help-reserve-link">Voir les créneaux →</a>
