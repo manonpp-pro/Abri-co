@@ -618,6 +618,70 @@
         margin-top: 0.25rem;
     }
 
+    .help-price {
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+        margin-top: 0.55rem;
+    }
+
+    .help-price strong {
+        color: #e96d43;
+        font-size: 1.1rem;
+        font-weight: 800;
+    }
+
+    .help-price s {
+        color: #d8b3a5;
+        font-size: 0.65rem;
+    }
+
+    .help-price span {
+        border-radius: 9999px;
+        background: #fff0e7;
+        padding: 0.2rem 0.4rem;
+        color: #e96d43;
+        font-size: 0.6rem;
+        font-weight: 800;
+    }
+
+    .help-checklist {
+        display: grid;
+        gap: 0.35rem;
+        margin-top: 0.7rem;
+        border: 0;
+        padding: 0;
+    }
+
+    .help-checklist legend {
+        margin-bottom: 0.2rem;
+        color: #421b10;
+        font-size: 0.7rem;
+        font-weight: 800;
+    }
+
+    .help-checklist label {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        color: #b46e5b;
+        font-size: 0.68rem;
+    }
+
+    .help-checklist input {
+        width: 0.9rem;
+        height: 0.9rem;
+        accent-color: #e96d43;
+    }
+
+    .help-guide-link {
+        display: inline-block;
+        margin-top: 0.6rem;
+        color: #c9563b;
+        font-size: 0.68rem;
+        font-weight: 800;
+    }
+
     .help-booking-form {
         display: grid;
         gap: 0.45rem;

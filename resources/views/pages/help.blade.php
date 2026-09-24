@@ -49,6 +49,27 @@
                         <h2>{{ $service['title'] }}</h2>
                         <p class="help-description">{{ $service['description'] }}</p>
                         <p class="help-location">{{ $service['location'] }}</p>
+
+                        @if (isset($service['price']))
+                            <div class="help-price" aria-label="Prix {{ $service['price'] }} au lieu de {{ $service['original_price'] }}">
+                                <strong>{{ $service['price'] }}</strong>
+                                <s>{{ $service['original_price'] }}</s>
+                                <span>{{ $service['discount'] }}</span>
+                            </div>
+                        @endif
+
+                        @if (isset($service['checks']))
+                            <fieldset class="help-checklist">
+                                <legend>Vérifier ma situation</legend>
+                                @foreach ($service['checks'] as $check)
+                                    <label>
+                                        <input type="checkbox" name="guide-check-{{ $service['key'] }}-{{ $loop->index }}">
+                                        <span>{{ $check }}</span>
+                                    </label>
+                                @endforeach
+                            </fieldset>
+                            <a href="{{ $service['guide_url'] }}" class="help-guide-link" target="_blank" rel="noopener noreferrer">{{ $service['guide_label'] }} ↗</a>
+                        @endif
                     </div>
 
                     @auth
