@@ -189,6 +189,50 @@
         text-align: center;
     }
 
+    .profile-donations {
+        margin-top: 2rem;
+    }
+
+    .profile-donations > h2 {
+        color: #421b10;
+        font-size: 1rem;
+        font-weight: 800;
+    }
+
+    .profile-donation-total,
+    .profile-donation-row {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-top: 0.75rem;
+        border: 1px solid #f4cbbd;
+        border-radius: 1rem;
+        background: white;
+        padding: 0.8rem 1rem;
+    }
+
+    .profile-donation-total strong {
+        color: #a52d0b;
+        font-size: 1.6rem;
+    }
+
+    .profile-donation-total span,
+    .profile-donation-row p {
+        color: #c76d59;
+        font-size: 0.7rem;
+    }
+
+    .profile-donation-row > span {
+        color: #a52d0b;
+        font-size: 1.2rem;
+    }
+
+    .profile-donation-row h3 {
+        color: #421b10;
+        font-size: 0.78rem;
+        font-weight: 800;
+    }
+
     .profile-distributions {
         margin-top: 2.5rem;
     }
@@ -921,7 +965,7 @@
     .donation-form legend,
     .donation-form label > span {
         display: block;
-        margin-bottom: 0.4rem;
+        margin-bottom: 0.75rem;
         color: #421b10;
         font-size: 0.72rem;
         font-weight: 800;
@@ -1469,16 +1513,22 @@
     }
 
     .volunteer-opportunity h3 {
+        margin-bottom: 0.4rem;
         font-size: 0.7rem;
         font-weight: 800;
+        line-height: 1.3;
     }
 
     .volunteer-opportunity p,
     .volunteer-opportunity small {
         display: block;
-        margin-top: 0.15rem;
+        margin-top: 0.35rem;
         color: #c76d59;
         font-size: 0.58rem;
+    }
+
+    .volunteer-opportunity h3 + p {
+        margin-top: 0.9rem;
     }
 
     .volunteer-opportunity a,
@@ -1517,4 +1567,172 @@
         margin-top: 0.25rem;
         color: #c76d59;
         font-size: 0.64rem;
+    }
+
+    .help-sort {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        margin-top: 0.75rem;
+        color: #a52d0b;
+        font-size: 0.7rem;
+        font-weight: 800;
+    }
+
+    .help-sort select {
+        border: 1px solid #f4cbbd;
+        border-radius: 9999px;
+        background: white;
+        padding: 0.5rem 0.75rem;
+        color: #a52d0b;
+        font-size: 0.68rem;
+        outline: none;
+    }
+
+    .help-availability {
+        display: block;
+        margin-top: 0.2rem;
+        color: #c76d59;
+        font-size: 0.62rem;
+    }
+
+    .help-service-card h2 a,
+    .volunteer-opportunity h3 a {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .profile-cancel-button,
+    .association-card-actions button,
+    .association-need-card button {
+        border: 0;
+        border-radius: 9999px;
+        background: #f4cbbd;
+        padding: 0.45rem 0.7rem;
+        color: #a52d0b;
+        font-size: 0.62rem;
+        font-weight: 800;
+        cursor: pointer;
+    }
+
+    .profile-cancel-button:hover,
+    .association-card-actions button:hover,
+    .association-need-card button:hover {
+        background: #a52d0b;
+        color: white;
+    }
+
+    .association-card-actions {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 0.35rem;
+    }
+
+    .association-need-card form {
+        grid-column: 2;
+        justify-self: end;
+    }
+
+    .home-partners {
+        margin-top: 2.5rem;
+    }
+
+    .home-partners > h2 {
+        color: #173f45;
+        font-size: 0.85rem;
+        font-weight: 800;
+    }
+
+    .home-partner-list {
+        display: grid;
+        gap: 0.6rem;
+        margin-top: 0.75rem;
+    }
+
+    .home-partner-card {
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+        border: 1px solid #f4cbbd;
+        border-radius: 1rem;
+        background: white;
+        padding: 0.75rem 1rem;
+    }
+
+    .home-partner-card > span {
+        font-size: 1.25rem;
+    }
+
+    .home-partner-card h3 {
+        color: #421b10;
+        font-size: 0.75rem;
+        font-weight: 800;
+    }
+
+    .home-partner-card p,
+    .home-partners-empty {
+        margin-top: 0.15rem;
+        color: #c76d59;
+        font-size: 0.65rem;
+    }
+
+    .post-detail-page {
+        min-height: 70vh;
+    }
+
+    .post-detail-back {
+        color: #a52d0b;
+        font-size: 0.75rem;
+        font-weight: 800;
+        text-decoration: none;
+    }
+
+    .post-detail-card {
+        margin-top: 1rem;
+        border-radius: 2rem;
+        background: #a52d0b;
+        padding: 2rem;
+        color: white;
+    }
+
+    .post-detail-category {
+        color: rgb(255 255 255 / 75%);
+        font-size: 0.7rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    .post-detail-card h1 {
+        margin-top: 0.65rem;
+        font-size: clamp(2rem, 5vw, 3rem);
+        font-weight: 800;
+        line-height: 1.05;
+    }
+
+    .post-detail-description {
+        margin-top: 1rem;
+        color: rgb(255 255 255 / 88%);
+        font-size: 1rem;
+        line-height: 1.7;
+    }
+
+    .post-detail-meta {
+        display: grid;
+        gap: 0.75rem;
+        margin-top: 1.5rem;
+    }
+
+    .post-detail-meta dt {
+        color: rgb(255 255 255 / 65%);
+        font-size: 0.65rem;
+        font-weight: 800;
+        text-transform: uppercase;
+    }
+
+    .post-detail-meta dd {
+        margin-top: 0.15rem;
+        font-weight: 700;
     }
