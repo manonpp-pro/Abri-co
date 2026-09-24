@@ -1386,6 +1386,61 @@
         background: #862508;
     }
 
+    .association-landing-page {
+        max-width: 48rem;
+        margin: 0 auto;
+        padding: 2rem 0 4rem;
+    }
+
+    .association-landing-panel {
+        border-radius: 2rem;
+        background: #a52d0b;
+        padding: 2.5rem 2rem;
+        color: white;
+        box-shadow: 0 0.5rem 1rem rgb(165 45 11 / 15%);
+    }
+
+    .association-landing-eyebrow {
+        color: rgb(255 255 255 / 75%);
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    .association-landing-panel h1 {
+        max-width: 36rem;
+        margin-top: 0.75rem;
+        font-size: clamp(2rem, 5vw, 3.25rem);
+        font-weight: 800;
+        line-height: 1.05;
+    }
+
+    .association-landing-copy {
+        max-width: 35rem;
+        margin-top: 1rem;
+        color: rgb(255 255 255 / 85%);
+        font-size: 1.05rem;
+        line-height: 1.7;
+    }
+
+    .association-landing-action {
+        display: inline-block;
+        margin-top: 1.75rem;
+        border-radius: 9999px;
+        background: white;
+        padding: 0.8rem 1.25rem;
+        color: #a52d0b;
+        font-weight: 800;
+        text-decoration: none;
+        transition: transform 150ms ease, background 150ms ease;
+    }
+
+    .association-landing-action:hover {
+        background: #ffcdb1;
+        transform: translateY(-2px);
+    }
+
     .volunteer-section-heading {
         margin: 1rem 0.6rem 0.65rem;
         scroll-margin-top: 1rem;

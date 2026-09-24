@@ -89,11 +89,13 @@
             </div>
         </section>
     @else
-        <section class="mx-auto max-w-4xl py-16 lg:py-24">
-            <p class="text-sm font-semibold uppercase tracking-[0.2em] text-coral">Les forces réunies vont plus loin</p>
-            <h1 class="mt-4 max-w-3xl text-4xl font-semibold tracking-tight text-ink">Faites grandir vos actions avec Abri-co.</h1>
-            <p class="mt-5 max-w-2xl text-lg leading-8 text-slate-600">Créez votre espace association pour publier vos événements, suivre vos besoins et mobiliser des bénévoles.</p>
-            <a href="{{ route('register.professional') }}" class="mt-10 inline-block rounded-full bg-ink px-6 py-3 font-semibold text-white transition hover:bg-coral">Inscrire mon association</a>
+        <section class="association-landing-page">
+            <div class="association-landing-panel">
+                <p class="association-landing-eyebrow">Les forces réunies vont plus loin</p>
+                <h1>Faites grandir vos actions avec Abri-co.</h1>
+                <p class="association-landing-copy">Créez votre espace association pour publier vos événements, suivre vos besoins et mobiliser des bénévoles.</p>
+                <a href="{{ route('register.professional') }}" class="association-landing-action">Inscrire mon association</a>
+            </div>
         </section>
     @endif
 @endsection
