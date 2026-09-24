@@ -13,7 +13,7 @@
         <header class="border-b border-slate-200/80 bg-[#f7f5ef]/90 backdrop-blur">
             <nav class="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-10" aria-label="Navigation principale">
                 <a href="{{ route('home') }}" class="brand-logo" aria-label="Abri-co">
-                    <img data-brand-logo src="{{ Vite::asset('resources/image/logo-abro-co.svg') }}" alt="Abri-co" class="brand-logo-image">
+                    <img data-brand-logo src="{{ asset('image/logo-abroo-co.svg') }}" alt="Abri-co" class="brand-logo-image">
                 </a>
                 <div class="hidden items-center gap-7 text-sm font-medium text-slate-600 md:flex">
                     <a href="{{ route('help') }}" class="transition hover:text-coral">Besoin d'aide</a>
