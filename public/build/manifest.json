@@ -1,0 +1,68 @@
+{
+  "_fonts-BPQfheYh.css": {
+    "file": "assets/fonts-BPQfheYh.css",
+    "src": "_fonts-BPQfheYh.css"
+  },
+  "_playpen-sans-400-normal-DvPC6RCc.woff2": {
+    "file": "assets/playpen-sans-400-normal-DvPC6RCc.woff2",
+    "src": "_playpen-sans-400-normal-DvPC6RCc.woff2"
+  },
+  "_playpen-sans-400-normal-U5I4gWjh.woff": {
+    "file": "assets/playpen-sans-400-normal-U5I4gWjh.woff",
+    "src": "_playpen-sans-400-normal-U5I4gWjh.woff"
+  },
+  "_playpen-sans-500-normal-BdBsGy8S.woff": {
+    "file": "assets/playpen-sans-500-normal-BdBsGy8S.woff",
+    "src": "_playpen-sans-500-normal-BdBsGy8S.woff"
+  },
+  "_playpen-sans-500-normal-Bs3_XcE0.woff2": {
+    "file": "assets/playpen-sans-500-normal-Bs3_XcE0.woff2",
+    "src": "_playpen-sans-500-normal-Bs3_XcE0.woff2"
+  },
+  "_playpen-sans-600-normal-BGcLSDTO.woff2": {
+    "file": "assets/playpen-sans-600-normal-BGcLSDTO.woff2",
+    "src": "_playpen-sans-600-normal-BGcLSDTO.woff2"
+  },
+  "_playpen-sans-600-normal-CEmV5jNi.woff": {
+    "file": "assets/playpen-sans-600-normal-CEmV5jNi.woff",
+    "src": "_playpen-sans-600-normal-CEmV5jNi.woff"
+  },
+  "_playpen-sans-700-normal-B0bQHveL.woff": {
+    "file": "assets/playpen-sans-700-normal-B0bQHveL.woff",
+    "src": "_playpen-sans-700-normal-B0bQHveL.woff"
+  },
+  "_playpen-sans-700-normal-BD5CnPHn.woff2": {
+    "file": "assets/playpen-sans-700-normal-BD5CnPHn.woff2",
+    "src": "_playpen-sans-700-normal-BD5CnPHn.woff2"
+  },
+  "_playpen-sans-800-normal-C8oQEuCh.woff2": {
+    "file": "assets/playpen-sans-800-normal-C8oQEuCh.woff2",
+    "src": "_playpen-sans-800-normal-C8oQEuCh.woff2"
+  },
+  "_playpen-sans-800-normal-DKDiq20q.woff": {
+    "file": "assets/playpen-sans-800-normal-DKDiq20q.woff",
+    "src": "_playpen-sans-800-normal-DKDiq20q.woff"
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-CEVExVpp.css",
+    "name": "app",
+    "names": [
+      "app.css"
+    ],
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/image/logo-abro-co.svg": {
+    "file": "assets/logo-abro-co-DyZbcbpP.svg",
+    "src": "resources/image/logo-abro-co.svg"
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-CzIrF1lE.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "assets": [
+      "assets/logo-abro-co-DyZbcbpP.svg"
+    ]
+  }
+}
