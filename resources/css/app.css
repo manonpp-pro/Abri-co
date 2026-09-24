@@ -24,6 +24,14 @@
         font-family: 'Playpen Sans', ui-sans-serif, sans-serif !important;
         font-weight: 700;
     }
+
+    .brand-logo-image {
+        display: block;
+        height: 2.25rem;
+        width: auto;
+        max-width: 10rem;
+        object-fit: contain;
+    }
 }
 
     .home-action {

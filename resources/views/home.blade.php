@@ -4,7 +4,9 @@
 
 @section('content')
     <nav class="mx-auto flex max-w-3xl items-center justify-between border-b border-[#eaded6] py-5" aria-label="Navigation principale">
-        <a href="{{ route('home') }}" class="brand-logo text-2xl tracking-tight text-ink">abri<span class="text-coral">'</span>co</a>
+        <a href="{{ route('home') }}" class="brand-logo" aria-label="Abri-co">
+            <img data-brand-logo src="{{ Vite::asset('resources/image/logo-abro-co.svg') }}" alt="Abri-co" class="brand-logo-image">
+        </a>
         @auth
             <a href="{{ route('profile') }}" class="rounded-full bg-coral px-4 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-coral-dark">Mon profil</a>
         @else
