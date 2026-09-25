@@ -44,7 +44,7 @@
     "src": "_playpen-sans-800-normal-DKDiq20q.woff"
   },
   "resources/css/app.css": {
-    "file": "assets/app-PwV4rgsl.css",
+    "file": "assets/app-B18dv-AS.css",
     "name": "app",
     "names": [
       "app.css"
@@ -53,16 +53,16 @@
     "isEntry": true
   },
   "resources/image/logo-abro-co.svg": {
-    "file": "assets/logo-abro-co-DyZbcbpP.svg",
+    "file": "assets/logo-abro-co-CIjDXm2p.svg",
     "src": "resources/image/logo-abro-co.svg"
   },
   "resources/js/app.js": {
-    "file": "assets/app-L0JhJ92t.js",
+    "file": "assets/app-Bjn8VcB3.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
     "assets": [
-      "assets/logo-abro-co-DyZbcbpP.svg"
+      "assets/logo-abro-co-CIjDXm2p.svg"
     ]
   }
 }

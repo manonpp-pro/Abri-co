@@ -19,7 +19,7 @@
 
     <section class="mx-auto max-w-3xl py-8 sm:py-14">
         <div class="mb-8">
-            <p class="brand-logo text-3xl tracking-tight text-ink sm:text-5xl">Abri<span class="text-coral">'co</span></p>
+            <p class="brand-logo mascot-text-trigger text-3xl tracking-tight text-ink sm:text-5xl" data-mascot-trigger tabindex="0" role="button">Abri<span class="text-coral">'co</span></p>
             <p class="mt-3 max-w-xs text-sm leading-5 text-[#b46e5b] sm:text-base">Donner à ceux qui en ont besoin,<br>trouver de l'aide quand on en a besoin.</p>
         </div>
 

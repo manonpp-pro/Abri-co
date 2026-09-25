@@ -40,6 +40,11 @@
         @yield('content')
     </main>
 
+    <div class="mascot-easter-egg" data-mascot-popup hidden role="status" aria-live="polite">
+        <img src="{{ Vite::asset('resources/image/mascotte_abri-co.svg') }}" alt="Mascotte Abri-co">
+        <p>Tu rends Abri-co meilleur</p>
+    </div>
+
     @unless (trim($__env->yieldContent('minimal_layout')) === 'true')
         <footer class="mt-10 border-t border-slate-200 px-6 py-8 text-center text-sm text-slate-500 lg:px-10">
             <p>Abri-co, créer du lien quand il compte vraiment.</p>

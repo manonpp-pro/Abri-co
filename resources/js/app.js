@@ -4,6 +4,52 @@ document.querySelectorAll('[data-brand-logo]').forEach((logo) => {
 	logo.src = logoUrl;
 });
 
+const mascotPopup = document.querySelector('[data-mascot-popup]');
+
+if (mascotPopup) {
+	let mascotTimeout;
+
+	const showMascot = (event) => {
+		event.preventDefault();
+		mascotPopup.hidden = false;
+		mascotPopup.classList.remove('is-visible');
+		requestAnimationFrame(() => mascotPopup.classList.add('is-visible'));
+		clearTimeout(mascotTimeout);
+		mascotTimeout = setTimeout(() => {
+			mascotPopup.classList.remove('is-visible');
+			setTimeout(() => {
+				mascotPopup.hidden = true;
+			}, 220);
+		}, 4200);
+	};
+
+	document.querySelectorAll('[data-mascot-trigger]').forEach((trigger) => {
+		let clickCount = 0;
+		let clickResetTimeout;
+
+		const countMascotClick = (event) => {
+			event.preventDefault();
+			clickCount += 1;
+			clearTimeout(clickResetTimeout);
+			clickResetTimeout = setTimeout(() => {
+				clickCount = 0;
+			}, 1200);
+
+			if (clickCount >= 2) {
+				clickCount = 0;
+				showMascot(event);
+			}
+		};
+
+		trigger.addEventListener('click', countMascotClick);
+		trigger.addEventListener('keydown', (event) => {
+			if (event.key === 'Enter' || event.key === ' ') {
+				countMascotClick(event);
+			}
+		});
+	});
+}
+
 const helpPage = document.querySelector('.help-page');
 
 if (helpPage) {
