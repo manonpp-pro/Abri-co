@@ -16,13 +16,13 @@
 
         <div class="volunteer-donations">
             <article class="volunteer-donation-card">
-                <span class="volunteer-donation-icon" aria-hidden="true">○</span>
+                <img class="volunteer-donation-icon" src="{{ Vite::asset('resources/image/mascotte_abri-co_argent.svg') }}" alt="Mascotte avec un don financier">
                 <h2>Don financier</h2>
                 <p>Particuliers, entreprises ou associations.</p>
                 <a href="{{ route('donation.create', ['type' => 'financial']) }}">Donner →</a>
             </article>
             <article class="volunteer-donation-card volunteer-donation-card-food">
-                <span class="volunteer-donation-icon" aria-hidden="true">○</span>
+                <img class="volunteer-donation-icon" src="{{ Vite::asset('resources/image/mascotte_abri-co_pasta.svg') }}" alt="Mascotte avec un don alimentaire">
                 <h2>Don alimentaire</h2>
                 <p>Dépose des denrées, seul ou avec ton organisation.</p>
                 <a href="{{ route('donation.create', ['type' => 'food']) }}">Proposer un don →</a>
