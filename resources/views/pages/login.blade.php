@@ -4,6 +4,7 @@
 @section('minimal_layout', 'true')
 
 @section('content')
+    {{-- Les erreurs Laravel sont affichées sans jamais conserver le mot de passe saisi. --}}
     <section class="registration-page login-page">
         <header class="registration-heading">
             <p>Espace Personnel</p>

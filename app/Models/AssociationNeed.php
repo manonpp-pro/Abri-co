@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class AssociationNeed extends Model
 {
+    // Les quantités permettent de calculer la barre de progression du besoin en temps réel.
     protected $fillable = [
         'user_id',
         'name',

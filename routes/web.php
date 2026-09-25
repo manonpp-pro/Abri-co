@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\Rule;
 
+// Catalogue public des aides. Les créneaux restent ici pour être réutilisés par l'affichage et la réservation.
 $helpServices = [
     [
         'key' => 'collecte-solidaire',
@@ -139,6 +140,7 @@ $helpServices = [
     ],
 ];
 
+// Ces opportunités servent de contenu de départ; les événements d'associations sont ensuite ajoutés depuis la base.
 $volunteerOpportunities = [
     [
         'key' => 'distribution-paniers-saint-denis',
@@ -188,6 +190,7 @@ Route::get('/', function () {
     ]);
 })->name('home');
 Route::get('/besoin-aide', function () use ($helpServices) {
+    // Chaque service reçoit son nombre de places restant avant d'être envoyé à la vue.
     $services = collect($helpServices)->map(function (array $service): array {
         $capacity = $service['capacity'] ?? 5;
         $availability = collect($service['slots'])->mapWithKeys(function (string $slot) use ($service, $capacity): array {
@@ -299,6 +302,7 @@ Route::get('/association', function (Request $request) {
 
     $user = $request->user();
 
+    // Une association ne voit que ses propres événements et besoins dans son espace de gestion.
     return view('pages.association', [
         'dashboard' => true,
         'association' => $user,
@@ -365,6 +369,7 @@ Route::post('/association/evenement', function (Request $request) {
         'description' => ['nullable', 'string', 'max:2000'],
     ]);
 
+    // L'utilisateur connecté devient automatiquement le propriétaire de la publication.
     AssociationEvent::create([...$validated, 'user_id' => $request->user()->id]);
 
     return to_route('association', ['tab' => 'events'])->with('status', 'Événement publié.');
@@ -422,6 +427,7 @@ Route::post('/besoin-aide/reservation', function (Request $request) use ($helpSe
         return back()->withErrors(['slot_time' => 'Ce créneau est complet.'])->withInput();
     }
 
+    // firstOrCreate évite qu'un double clic crée deux réservations identiques.
     $reservation = Reservation::firstOrCreate([
         'user_id' => $request->user()->id,
         'service_key' => $service['key'],
@@ -475,6 +481,7 @@ Route::post('/aider/inscription-evenement', function (Request $request) {
         'event' => ['required', 'integer', Rule::exists('association_events', 'id')->where('status', 'published')],
     ]);
 
+    // On relit l'événement en base pour ne jamais faire confiance aux données envoyées par le navigateur.
     $event = AssociationEvent::where('status', 'published')->findOrFail($validated['event']);
     $reservedCount = Reservation::query()
         ->where('service_key', 'association-event-'.$event->id)

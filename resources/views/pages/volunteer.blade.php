@@ -54,6 +54,7 @@
             @endforeach
         </div>
 
+        {{-- Les événements créés par les associations rejoignent le même fil que les opportunités bénévoles. --}}
         @if ($associationEvents->isNotEmpty())
             <div id="association-events" class="volunteer-section-heading"><h2>Événements des associations</h2></div>
             <div class="volunteer-opportunities">

@@ -3,6 +3,7 @@
 @section('title', 'Accueil')
 
 @section('content')
+    {{-- L'accueil sert de point de départ vers les parcours aide, bénévolat et association. --}}
     <nav class="mx-auto flex max-w-3xl items-center justify-between border-b border-[#eaded6] py-5" aria-label="Navigation principale">
         <a href="{{ route('home') }}" class="brand-logo" aria-label="Abri-co">
             <img data-brand-logo src="{{ Vite::asset('resources/image/logo-abro-co.svg') }}" alt="Abri-co" class="brand-logo-image">

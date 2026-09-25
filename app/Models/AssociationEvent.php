@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AssociationEvent extends Model
 {
+    // L'association propriétaire sert à afficher son nom dans les flux publics.
     protected $fillable = [
         'user_id',
         'title',
@@ -21,6 +22,7 @@ class AssociationEvent extends Model
 
     protected function casts(): array
     {
+        // Le formatage de la date est fait directement dans les cartes et le détail d'événement.
         return [
             'starts_at' => 'datetime',
         ];

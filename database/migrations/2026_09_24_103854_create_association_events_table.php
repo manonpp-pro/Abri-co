@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Les événements restent liés à leur association pour contrôler leur édition et leur suppression.
         Schema::create('association_events', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();

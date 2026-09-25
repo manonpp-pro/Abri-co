@@ -148,6 +148,7 @@
         @apply mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-ink outline-none transition focus:border-coral focus:ring-2 focus:ring-coral/20;
     }
 
+    /* Les règles du profil sont partagées entre bénéficiaires et professionnels. */
     .profile-page {
         max-width: 31rem;
     }
@@ -339,6 +340,7 @@
         font-size: 0.65rem;
     }
 
+    /* Les écrans d'inscription utilisent une grille compacte pensée pour le mobile. */
     .registration-page {
         min-height: 100vh;
         background: #fff8f3;
@@ -556,6 +558,7 @@
         }
     }
 
+    /* Le fil d'aide reprend les cartes, filtres et états de réservation de la maquette. */
     .help-page {
         color: #421b10;
     }
@@ -850,6 +853,7 @@
         }
     }
 
+    /* Les blocs bénévolat et dons restent denses pour conserver une lecture rapide. */
     .volunteer-page {
         color: #421b10;
     }
@@ -954,6 +958,7 @@
         background: #a52d0b;
     }
 
+    /* Le formulaire de don s'adapte au choix particulier/organisation et financier/alimentaire. */
     .donation-page {
         color: #421b10;
     }
@@ -1131,6 +1136,7 @@
         }
     }
 
+    /* Le tableau de bord association garde la même base visuelle que les feeds publics. */
     .association-dashboard {
         color: #421b10;
     }

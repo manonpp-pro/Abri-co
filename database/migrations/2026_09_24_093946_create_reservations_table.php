@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Une contrainte unique empêche un même utilisateur de réserver deux fois le même créneau.
         Schema::create('reservations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();

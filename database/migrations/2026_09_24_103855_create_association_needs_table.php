@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // current_quantity et target_quantity alimentent directement la progression affichée dans le dashboard.
         Schema::create('association_needs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();

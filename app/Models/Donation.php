@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Donation extends Model
 {
+    // Seuls ces champs peuvent venir directement du formulaire de proposition de don.
     protected $fillable = [
         'user_id',
         'donor_type',
@@ -20,6 +21,7 @@ class Donation extends Model
 
     protected function casts(): array
     {
+        // Le montant reste précis pour l'affichage et les futurs traitements financiers.
         return [
             'amount' => 'decimal:2',
         ];

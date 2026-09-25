@@ -42,6 +42,7 @@
             </div>
         @endguest
 
+        {{-- Les publications associatives sont visibles par tous, même avant la connexion. --}}
         @if ($associationEvents->isNotEmpty())
             <div class="help-feed-heading"><h2>Actualités des associations</h2></div>
             <div class="help-list">
@@ -90,6 +91,7 @@
                         @endif
                     </div>
 
+                    {{-- La réservation n'est proposée qu'après connexion, mais le service reste documenté publiquement. --}}
                     @auth
                         <form method="POST" action="{{ route('help.reserve') }}" class="help-booking-form" data-help-service="{{ $service['key'] }}">
                             @csrf

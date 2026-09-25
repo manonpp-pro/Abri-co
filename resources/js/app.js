@@ -8,6 +8,7 @@ const mascotPopup = document.querySelector('[data-mascot-popup]');
 
 if (mascotPopup) {
 	let mascotTimeout;
+	// Deux clics rapprochés évitent d'activer la mascotte par accident en voulant revenir à l'accueil.
 
 	const showMascot = (event) => {
 		event.preventDefault();
@@ -60,6 +61,7 @@ if (helpPage) {
 	const noResults = helpPage.querySelector('[data-help-no-results]');
 	let activeFilter = 'all';
 
+	// Le filtrage reste côté navigateur pour que les onglets et la recherche soient instantanés.
 	const updateServices = () => {
 		const search = searchInput.value.trim().toLowerCase();
 		let visibleCount = 0;
@@ -77,6 +79,7 @@ if (helpPage) {
 	};
 
 	const sortServices = () => {
+		// Les cartes portent leurs valeurs de tri dans des data-* pour éviter de dupliquer les données en JS.
 		const sort = sortSelect.value;
 		const list = helpPage.querySelector('.help-list');
 		const sortedCards = [...serviceCards].sort((firstCard, secondCard) => {
@@ -117,6 +120,7 @@ if (helpPage) {
 		const submitButton = bookingForm.querySelector('button[type="submit"]');
 		const serviceKey = bookingForm.dataset.helpService;
 
+		// On recharge les places disponibles lorsque la date change, puis on bloque les créneaux complets.
 		const updateAvailability = async () => {
 			const response = await fetch(`/besoin-aide/${serviceKey}/disponibilite?date=${dateInput.value}`);
 			if (!response.ok) {
@@ -156,6 +160,7 @@ if (donationForm) {
 	const amountInput = donationForm.querySelector('input[name="amount"]');
 	const descriptionInput = donationForm.querySelector('textarea[name="description"]');
 
+	// Un don financier et un don alimentaire ne demandent pas les mêmes informations.
 	const updateDonationFields = () => {
 		const donorType = donationForm.querySelector('input[name="donor_type"]:checked')?.value;
 		const donationType = donationForm.querySelector('input[name="donation_type"]:checked')?.value;

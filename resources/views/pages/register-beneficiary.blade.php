@@ -4,6 +4,7 @@
 @section('minimal_layout', 'true')
 
 @section('content')
+    {{-- Le même formulaire sert à créer puis à modifier un profil bénéficiaire. --}}
     @php
         $editing = $editing ?? false;
         $profileUser = $user ?? null;

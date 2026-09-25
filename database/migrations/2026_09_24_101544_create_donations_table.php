@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Les deux types de don partagent une table, car leur suivi et leur confirmation sont identiques.
         Schema::create('donations', function (Blueprint $table) {
             $table->id();
             $table->string('donor_type');

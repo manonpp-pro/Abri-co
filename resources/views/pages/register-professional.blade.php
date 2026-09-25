@@ -4,6 +4,7 @@
 @section('minimal_layout', 'true')
 
 @section('content')
+    {{-- Le mode editing permet de réutiliser cette vue depuis l'espace association. --}}
     @php
         $editing = $editing ?? false;
         $profileUser = $user ?? null;
